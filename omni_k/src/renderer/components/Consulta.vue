@@ -1,22 +1,23 @@
 <template>
     <div class="container">
-    <form class="formulario" @submit.prevent="findBarcode()">
-        <input v-model="datos.barcode" type="text" name='codigoProducto' placeholder=" Ingrese código de barra" >
+    <form class="formulario" @submit.prevent="findProduct()">
+        <input v-model="newDatos.barcode" type="text" name='codigoProducto' placeholder=" Ingrese código de barra" >
         <button type="submit">Buscar</button>
     </form>
-    <div class="table">
+    <div class="table" v-if="submitted">
         <div class="table-row header">
+            <!-- <div class="text th_element">Barcode</div> -->
+            <div class="text th_element">Id Item</div>
             <div class="text th_element">SKU</div>
-            <div class="text th_element">Barcode</div>
-            <div class="text th_element">Color</div>
-            <div class="text th_element">Precio</div>
+            <!-- <div class="text th_element">Color</div>
+            <div class="text th_element">Precio</div> -->
         </div>
         <div class="table-body">
             <div class="table-row" v-for='dato in datos' >
-            <div  class="text td_element">{{dato.sku}}</div>
             <div class="text td_element">{{dato.barcode}}</div>
-            <div class="text td_element">{{dato.colors}}</div>
-            <div class="text td_element">{{dato.precio}}</div>
+            <!-- <div  class="text td_element">{{dato.sku}}</div> -->
+            <!-- <div class="text td_element">{{dato.colors}}</div>
+            <div class="text td_element">{{dato.precio}}</div> -->
             </div>
         </div>
     </div>
@@ -28,165 +29,17 @@ export default {
   name: "consulta",
   data() {
     return {
-      datos: [
-        {
-          sku: "0161651321",
-          barcode: "816215164",
-          colors: "azul",
-          precio: "3000$"
-        },
-        {
-          sku: "0161651322",
-          barcode: "816248964",
-          colors: "verde",
-          precio: "7000$"
-        },
-        {
-          sku: "01616589251",
-          barcode: "818975164",
-          colors: "azul",
-          precio: "4500$"
-        },
-        {
-          sku: "0161651329",
-          barcode: "816812644",
-          colors: "morado",
-          precio: "8642$"
-        },
-        {
-          sku: "01616589251",
-          barcode: "818975164",
-          colors: "azul",
-          precio: "4500$"
-        },
-        {
-          sku: "0161651329",
-          barcode: "816812644",
-          colors: "morado",
-          precio: "8642$"
-        },
-        {
-          sku: "01616589251",
-          barcode: "818975164",
-          colors: "azul",
-          precio: "4500$"
-        },
-        {
-          sku: "0161651329",
-          barcode: "816812644",
-          colors: "morado",
-          precio: "8642$"
-        },
-        {
-          sku: "01616589251",
-          barcode: "818975164",
-          colors: "azul",
-          precio: "4500$"
-        },
-        {
-          sku: "0161651329",
-          barcode: "816812644",
-          colors: "morado",
-          precio: "8642$"
-        },
-        {
-          sku: "01616589251",
-          barcode: "818975164",
-          colors: "azul",
-          precio: "4500$"
-        },
-        {
-          sku: "0161651329",
-          barcode: "816812644",
-          colors: "morado",
-          precio: "8642$"
-        },
-        {
-          sku: "01616589251",
-          barcode: "818975164",
-          colors: "azul",
-          precio: "4500$"
-        },
-        {
-          sku: "0161651329",
-          barcode: "816812644",
-          colors: "morado",
-          precio: "8642$"
-        },
-        {
-          sku: "01616589251",
-          barcode: "818975164",
-          colors: "azul",
-          precio: "4500$"
-        },
-        {
-          sku: "0161651329",
-          barcode: "816812644",
-          colors: "morado",
-          precio: "8642$"
-        },
-        {
-          sku: "01616589251",
-          barcode: "818975164",
-          colors: "azul",
-          precio: "4500$"
-        },
-        {
-          sku: "0161651329",
-          barcode: "816812644",
-          colors: "morado",
-          precio: "8642$"
-        },
-        {
-          sku: "01616589251",
-          barcode: "818975164",
-          colors: "azul",
-          precio: "4500$"
-        },
-        {
-          sku: "0161651329",
-          barcode: "816812644",
-          colors: "morado",
-          precio: "8642$"
-        },
-        {
-          sku: "01616589251",
-          barcode: "818975164",
-          colors: "azul",
-          precio: "4500$"
-        },
-        {
-          sku: "0161651329",
-          barcode: "816812644",
-          colors: "morado",
-          precio: "8642$"
-        },
-        {
-          sku: "01616589251",
-          barcode: "818975164",
-          colors: "azul",
-          precio: "4500$"
-        },
-        {
-          sku: "0161651329",
-          barcode: "816812644",
-          colors: "morado",
-          precio: "8642$"
-        },
-        {
-          sku: "01616589251",
-          barcode: "818975164",
-          colors: "azul",
-          precio: "4500$"
-        },
-        {
-          sku: "0161651329",
-          barcode: "816812644",
-          colors: "morado",
-          precio: "8642$"
-        }
-      ]
+      datos: [],
+      newDatos: {},
+      submitted: false
     };
+  },
+  methods: {
+    findProduct() {
+      this.datos.push(this.newDatos);
+      this.newDatos = {};
+      this.submitted = true;
+    }
   }
 };
 </script>

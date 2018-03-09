@@ -6,7 +6,6 @@
           <a href="" alt="Introducir código" title="Introducir código"><img src="@/assets/manual.png" alt=""></a>  
       </div>
       <consulta></consulta>
-      
     </div>
   </div>
 </template>
@@ -28,7 +27,7 @@ export default {
 
 <style lang="sass">
 
-*
+*, *:after, *:before
   box-sizing: border-box
   margin: 0
   padding: 0
@@ -36,7 +35,6 @@ export default {
 #app, body, html
   width: 100%
   height: 100%
- 
   overflow: hidden
   font-family: helvetica
 
@@ -55,7 +53,7 @@ a
     display: flex
     flex-direction: row
     justify-content: flex-start
-    flex: 1 0 13%
+    flex: 0 0 13%
     img
         width: 42px
         height: auto
