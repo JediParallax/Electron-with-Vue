@@ -2,20 +2,24 @@
   <div id="app">
     <div class="main">
       <div class="menu-icons">
-          <a href="" alt="Escanear código de barra" title="Escanear código de barra"><img src="@/assets/barcode_scanner.png" alt=""> </a> 
-          <a href="" alt="Introducir código" title="Introducir código"><img src="@/assets/manual.png" alt=""></a>  
+        <router-link to="/"><img src="@/assets/barcode_scanner.png" alt=""></router-link>
+        <router-link to="/CargarVenta"><img src="@/assets/manual.png" alt=""></router-link>
+          <!-- <a href="" alt="Escanear código de barra" title="Escanear código de barra"><img src="@/assets/barcode_scanner.png" alt=""> </a> 
+          <a href="" alt="Introducir código" title="Introducir código"><img src="@/assets/manual.png" alt=""></a>   -->
       </div>
-      <consulta></consulta>
+      <router-view></router-view> 
     </div>
   </div>
 </template>
 
 <script>
 import Consulta from "@/components/Consulta";
+import CargarVenta from "@/components/CargarVenta";
 
 export default {
   components: {
-    Consulta
+    Consulta,
+    CargarVenta
   },
   name: "omni_k",
 

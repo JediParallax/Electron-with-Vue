@@ -108,4 +108,5 @@ export default {
 
 .td_element
    padding: 2.6px 0
+   
 </style>
