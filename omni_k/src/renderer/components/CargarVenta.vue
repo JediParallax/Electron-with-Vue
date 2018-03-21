@@ -1,17 +1,19 @@
 <template>
-    <div>
-      {{loco}}
-    </div>
+
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-  name: "cargarVenta",
   data() {
     return {
-      loco: "habla cloroo menol"
+      errors: []
     };
-  }
+  },
+
+  // Fetches posts when the component is created.
+  created() {}
 };
 </script>
 

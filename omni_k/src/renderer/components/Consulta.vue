@@ -1,42 +1,55 @@
 <template>
     <div class="container">
-    <form class="formulario" @submit.prevent="findProduct()">
-        <input v-model="newDatos.barcode" type="text" name='codigoProducto' placeholder=" Ingrese código de barra" >
-        <button type="submit">Buscar</button>
-    </form>
-    <div class="table" v-if="submitted">
-        <div class="table-row header">
-            <!-- <div class="text th_element">Barcode</div> -->
-            <div class="text th_element">Id Item</div>
-            <div class="text th_element">SKU</div>
-            <!-- <div class="text th_element">Color</div>
-            <div class="text th_element">Precio</div> -->
-        </div>
-        <div class="table-body">
-            <div class="table-row" v-for='dato in datos' >
-            <div class="text td_element">{{dato.barcode}}</div>
-            <!-- <div  class="text td_element">{{dato.sku}}</div> -->
-            <!-- <div class="text td_element">{{dato.colors}}</div>
-            <div class="text td_element">{{dato.precio}}</div> -->
+        <form class="formulario" @submit.prevent="findProduct()">
+            <input v-model="newDatos.sku" type="text" name='codigoProducto' placeholder=" Ingrese código de barra" >
+            <button type="submit">Buscar</button>
+        </form>
+        <div class="table" v-if="submitted">
+            <div class="table-row header">   
+                <div class="text th_element">SKU</div>
+                <div class="text th_element">Cantidad</div>
+            </div>
+            <div class="table-body">
+                <div v-if="datos.length > 0">
+                    <div class="table-row" v-for='dato in datos' >
+                        <div class="text td_element">{{dato.sku}}</div>
+                        <div class="text td_element">{{dato.cantidad}}</div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+        <div v-else-if="errors && errors.length"> 
+            <div v-for="error of errors">
+                    {{error.message}}
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "consulta",
   data() {
     return {
       datos: [],
+      errors: [],
       newDatos: {},
       submitted: false
     };
   },
   methods: {
     findProduct() {
-      this.datos.push(this.newDatos);
+      axios
+        .get(`http://200.14.252.14:3000/stockBodega/${this.newDatos.sku}`)
+        .then(response => {
+          this.datos = response.data;
+        })
+        .catch(e => {
+          this.errors.push(e);
+        });
+      /*  this.datos.push(this.newDatos); */
       this.newDatos = {};
       this.submitted = true;
     }
@@ -44,7 +57,7 @@ export default {
 };
 </script>
 
-<style lang="sass">
+<style scoped lang="sass">
 
 .container
     display: flex
