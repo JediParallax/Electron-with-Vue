@@ -1,5 +1,11 @@
 <template>
-
+<div class="container">
+<!--     <form class="formulario" >
+        <input type="text" name='codigoProducto' placeholder="Ingrese Número dee Boleta" > -->
+        <button type="button" @click="connect()">Cargar</button>
+<!-- </form> -->
+<div class="datosComprador"></div>
+ </div>
 </template>
 
 <script>
@@ -12,11 +18,10 @@ export default {
     };
   },
 
-  // Fetches posts when the component is created.
-  created() {}
+  methods: {}
 };
 </script>
 
-<style scoped>
+<style >
 
 </style>
