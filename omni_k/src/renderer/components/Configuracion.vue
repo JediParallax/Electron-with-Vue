@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="aligned">
-             {{warning}}
+          <div class="warning"> {{warning}} </div>
         </div>
     </div>
 </template>
@@ -11,7 +11,7 @@ export default {
   name: "configuracion",
   data() {
     return {
-      warning: "En construccion"
+      warning: "En construcción"
     };
   }
 };

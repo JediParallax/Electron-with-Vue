@@ -89,6 +89,7 @@
     "vue-html-loader": "^1.2.4",
     "vue-loader": "^13.0.5",
     "vue-style-loader": "^3.0.1",
+    "vue-sweetalert2": "^1.2.4",
     "vue-template-compiler": "^2.5.15",
     "webpack": "^3.5.2",
     "webpack-dev-server": "^2.11.2",

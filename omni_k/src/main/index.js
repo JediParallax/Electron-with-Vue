@@ -11,22 +11,21 @@ if (process.env.NODE_ENV !== "development") {
 }
 
 let mainWindow;
+
+// Ruta de la ventana principal de la app
 const winURL =
   process.env.NODE_ENV === "development"
     ? `http://localhost:9080`
     : `file://${__dirname}/index.html`;
 
 function createWindow() {
-  /**
-   * Initial window options
-   */
   mainWindow = new BrowserWindow({
     show: false,
-    width: 550,
-    height: 525,
+    width: 400,
+    height: 480,
     x: 1200,
     y: 300,
-    resizable: true
+    resizable: false
     // alwaysOnTop: true
   });
 

@@ -1,30 +1,36 @@
 <template>
     <div class="container">
         <form class="formulario" @submit.prevent="findProduct()">
-            <input v-model="newDatos.sku" type="text" name='codigoProducto' class="inputs" placeholder=" Ingrese código de barra" >
-            <button type="submit" class="btn-blue" >Buscar</button>
+            <input v-model="newDatos.sku" type="text" name='codigoProducto' class="input_family" placeholder=" Ingrese código de barra" >
+            <button type="submit" class="btn_green inside_input" >Buscar</button>
         </form>
-        <div  v-if="submitted">
+        <div v-if="submitted">
+            <div v-if="datos.length == 0" class="aligned">
+                <div class="warning" >Producto no encontrado</div>
+            </div>
+            <div v-else>
+                <div class="table">
+                    <div class="table-row header">   
+                        <div class="text th_element">SKU</div>
+                        <div class="text th_element">Cantidad</div>
+                    </div>
+                    <div class="table-body">
+                        <div class="table-row" v-for='dato in datos' >
+                            <div class="text td_element">{{dato.sku}}</div>
+                            <div class="text td_element">{{dato.cantidad}}</div>  
+                        </div>  
+                    </div>
+                </div> 
+                <div class="precios">
+                    <p>Precio Detalle: <span>$ {{price_detail}}</span></p>
+                    <p>Precio Promotora: <span>$ {{price_promotion}}</span></p> 
+                </div>
+            </div>
             <div v-if="errors && errors.length" class="aligned"> 
                 <div v-for="error of errors">
                     <div class="warning" > {{error.message}} </div>
                 </div>
             </div>
-            <div v-else-if="datos.length === 0" class="aligned">
-                <div class="warning" >Producto no encontrado.</div>
-            </div>
-            <div v-else class="table">
-                <div class="table-row header">   
-                    <div class="text th_element">SKU</div>
-                    <div class="text th_element">Cantidad</div>
-                </div>
-                <div class="table-body">
-                    <div class="table-row" v-for='dato in datos' >
-                        <div class="text td_element">{{dato.sku}}</div>
-                        <div class="text td_element">{{dato.cantidad}}</div>
-                    </div>   
-                </div>
-            </div> 
         </div>
     </div>
 </template>
@@ -39,7 +45,9 @@ export default {
       datos: [],
       errors: [],
       newDatos: {},
-      submitted: false
+      submitted: false,
+      price_detail: "",
+      price_promotion: ""
     };
   },
   methods: {
@@ -47,15 +55,25 @@ export default {
       axios
         .get(`http://200.14.252.14:3000/stockBodega/${this.newDatos.sku}`)
         .then(response => {
-          /*  if this.datos.sku.lenght  */
           this.datos = response.data;
+          if (this.datos.length > 0) {
+            this.price_detail = this.datos[0].precio_detalle;
+            this.price_promotion = this.datos[0].precio_promotora;
+            this.price_detail = parseInt(this.price_detail).toLocaleString();
+            this.price_promotion = parseInt(
+              this.price_promotion
+            ).toLocaleString();
+          }
         })
         .catch(e => {
-          errors.length = 0;
+          this.errors.length = 0;
           this.errors.push(e);
         });
       this.newDatos = {};
       this.submitted = true;
+      /*this.price_detail = "$ " + this.datos[0].precio_detalle;
+        this.price_promotion = "$ " + this.datos[0].precio_promotora;
+        console.log(this.price_detail, this.price_promotion);  */
     }
   }
 };
@@ -68,72 +86,69 @@ export default {
     flex: 1 1 auto
     flex-direction: column
            
-.inputs
-    border: $borders
-    border-radius: 6px;
-    padding: 5px
-
-.btn-blue
-    background-color: $second
-    border-radius: 5px
-    border: 2px solid $third
-    color: $third
-    padding: 5px
-    &:hover
-          cursor: pointer
-
 .formulario
     display: flex;
     justify-content: center
     flex: 0 0 5%
     margin-top: 20px
-    input
-        margin-right: 40px
       
 .aligned
     display: flex
     justify-content: center
 
 .warning
-    color: $fourth
-    padding-top: 23px
-    margin-top: 10px;
+    color:#fff
+    background-color: #fff
+    border-radius: 6px;
+    padding: 10px;
+    margin-top: 20px;
 
 .table
-     margin: 17px
-     border: $table_borders
-     border-radius: 4px;
-
+    margin: 17px
+    transition: all .2s ease-out
+    border: $table_border
+    box-shadow: 0 2px 43px -4px rgba(0,0,0,.19)
+    &:hover
+        transform: translateY(2px);
+        box-shadow: 0 2px 5px rgba(0,0,0,.1), 0 1px 2px rgba(0,0,0,.05)
 
 .table-body
-  overflow-y: scroll
-  flex-direction: column
-  height: auto
-  max-height: 272px
-  border-top: 0
+    height: auto
+    max-height: 185px;
+    border-top: 0
+    overflow-y: scroll
 
 .table-row
-  display: flex       
-  flex-direction: row               
-  flex-wrap: nowrap        
-  width: 100%
+    display: flex         
+    width: 100%
   
 .header 
-    background-color: $second
+    background-color: $white
     font-weight: bold
-    overflow-y: scroll
     border-bottom: 0
+    overflow-y: scroll
     .th_element
-         padding: 7px 0
+        padding: 7px 0
+        font-weight: bolder;
+        font-size: 18px;
          
 .text 
-  display: flex    
-  overflow: hidden
-  border: $alt_borders
-  justify-content: center
-  flex: 1 0 110px
-
+    display: flex    
+    overflow: hidden
+    border: $table_border
+    justify-content: center
+    flex: 1 0 110px
+    
 .td_element
-   padding: 2.6px 0
-   
+    padding: 2.6px 0
+    font-size: 17px
+
+.precios
+    float: right
+    margin: 0 9%
+    p
+       margin-bottom: 3px
+       span
+           font-weight: bold        
+           color: $green
 </style>
