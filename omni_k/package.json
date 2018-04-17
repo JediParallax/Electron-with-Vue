@@ -53,6 +53,7 @@
     "axios": "^0.16.1",
     "babel-cli": "^6.26.0",
     "babel-install": "^2.1.0",
+    "msnodesqlv8": "^0.6.1",
     "node-sass": "^4.7.2",
     "sass-loader": "^6.0.6",
     "vue": "^2.5.15",

@@ -2,12 +2,12 @@
   <div id="app">
     <div class="main">
       <div class="menu-icons">
-        <div class="icons_right">
-          <router-link to="/"><img src="@/assets/barcode_scanner.png" alt="Consultar Stock" title="Consultar Stock"></router-link>
-          <router-link to="/CargarVenta"><img src="@/assets/load.png" alt="Cargar Venta Omni" title="Cargar Venta Omni"></router-link>
-        </div>
         <div class="icons_left">
-          <router-link to="/Configuracion"><img src="@/assets/settings.png" alt="Configuración" title="Configuración"></router-link>
+          <router-link to="/"><img id="first_icon" class="icon_image" src="@/assets/barcode_scanner.png" alt="Consultar Stock" title="Consultar Stock"></router-link>
+          <router-link to="/CargarVenta"><img class="icon_image" src="@/assets/load.png" alt="Cargar Venta Omni" title="Cargar Venta Omni"></router-link>
+        </div>
+        <div class="icons_right">
+          <router-link to="/Configuracion"><img class="icon_image" src="@/assets/settings.png" alt="Configuración" title="Configuración"></router-link>
         </div>
       </div>
       <router-view></router-view> 
@@ -36,28 +36,22 @@ export default {
 
 <style lang="sass">
 
-*, *:after, *:before
-  box-sizing: border-box
-  margin: 0
-  padding: 0
+@import "./globals/_reset"
 
-#app, body, html
+html
   width: 100%
   height: 100%
   overflow: hidden
-  font-family: Dosis, sans-serif
   font-size: 19px
   color: $blue
-
-
-input, textarea, select
-  &:focus
-    outline-offset: 0
-    outline: 0
+  font-family: Dosis, sans-serif
 
 a
   text-decoration: none
-  color: $alt_white
+  color: $blue
+  &:hover
+    color: $green
+    cursor: pointer
 
 .main
   display: flex
@@ -68,29 +62,33 @@ a
     background-color: $blue
     display: flex
     flex-direction: row
-    .icons_right
-      display: flex
-      flex-direction: row
-      flex: 1 1 auto
-      justify-content: flex-start
-      margin-left: 10px;
+
     .icons_left
-       display: flex
-       flex-direction: row
-       flex: 1 1 auto
-       justify-content: flex-end
-       margin-right: 10px
-       img
-            margin: 10px 8px 10px 0px;
-    img
-        width: 42px
-        height: auto
-        margin: 10px 0 10px 8px
-        transition: all .1s ease-in-out
-        &:hover
-          transform: scale(1.1)
+      @extend %icons_properties
+      justify-content: flex-start
+      margin-left: 10px
+      img
+         margin: 10px 0 10px 8px
+
+    .icons_right
+      @extend %icons_properties
+      justify-content: flex-end
+      margin-right: 10px
+      img
+        margin: 10px 8px 10px 0px;
     
-          
+.icon_image
+    width: 42px
+    height: auto
+    transition: all 1s ease-in-out
+    &:hover
+        transform: rotate(180deg);
+
+#first_icon
+  transition: all .2s ease-in-out
+  &:hover 
+    transform: rotate(20deg)
+
 .input_family
     width: 90%
     height: 50px
@@ -106,28 +104,20 @@ a
     color: $blue
 
 .btn_green
-    font-family: Dosis, sans-serif
-    color: #fff
-    background-color: $green
-    border-color: $green
-    height: 51px
-    border-radius: 38px
-    font-weight: 700
-    padding-left: 27px
-    padding-right: 27px
-    border: 1px solid transparent
-    text-transform: uppercase
+    @extend %btn
+    +btn_color($green)
     &:hover
-        background-color: $green_hover
-        border-color: $green_hover
-        cursor: pointer
+      +btn_hover($green_hover)
 
+.btn_green_border
+    @extend %btn
+    +btn_outlined($green) 
+    &:hover
+      +btn_hover($green_hover)
+  
 .inside_input
     position: absolute
     top: 85px
     right: 22px
 
-
-
-        
 </style>

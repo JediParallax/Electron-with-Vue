@@ -2,7 +2,7 @@
 // Variables globales
 
 // Despues de cada nombre de etiqueta, clase o id, se presiona enter + tab y se empiezan a escribir los atributos, el uso de tab es indispensable
-// Sass necesita de un espacio en blanco luego despues de los dos puntos de su atributo, como se ve debajo, 'display: flex' tiene un espacio entre los dos puntos y el valor flex
+// Sass necesita de un espacio en blanco luego despues de los dos puntos de su atributo
 // Sass no usa ; ni {}
 
 $blue: #435b71 //Azul oscuro
@@ -12,3 +12,42 @@ $white: #f8f8f8 //blanco viejo (background)
 $alt_white: #f2f2f2 //hover del blanco viejo
 $grey: rgba(67,91,113,.5) //gris transparentoso (font)
 $table_border: 1px solid #ccc;
+$orange: #ff9800 //araranjado 
+
+//Estilos base de los botones
+%btn
+    font-family: Dosis, sans-serif
+    height: 51px
+    border-radius: 38px
+    font-weight: 700
+    padding-left: 27px
+    padding-right: 27px
+    text-transform: uppercase
+
+//propiedades de los iconos del menu horizontal
+%icons_properties
+    display: flex
+    flex-direction: row
+    flex: 1 1 auto
+
+//mixin que define el color de un boton
+=btn_color($color)
+    background-color: $color
+    border-color: $color
+    color: #fff
+    border: 1px solid transparent
+
+//mixin que define el color de un boton outlined
+=btn_outlined($color)
+    color: $color
+    border: 3px solid $color
+    background-color: #fff
+    transition: all .2s ease-out
+
+//define el hover de los botones
+=btn_hover($color)
+    background-color: $color
+    border-color: $color
+    color: #fff
+    cursor: pointer
+

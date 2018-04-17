@@ -10,7 +10,8 @@
                 <div class="warning"> {{error.message}} </div>
             </div>
         </div> 
-       <button class="btn-blue aligned"  @click="displayModal()">Datos de Usuario</button>
+       <a class="right" @click="displayModal()">Ver datos de comprador</a>
+
     </div> 
   </div>
 </template>
@@ -33,17 +34,16 @@ export default {
     displayModal() {
       this.$swal({
         html: `
-          <h2 id="innerModal">Datos de Comprador</h2>
-          <section class="fields">
-            <div>Nombre: Joan Manuel</div>
-            <div>Apellido: Monterrey Flores</div>
-            <div>Telefono: +56 931289778</div>
-            <div>Correo: joanmonterrey@gmail.com </div>
-            <div>Dirección: Av. Presidente balmaceda 2720</div>
-          </section>
+            <h2 id="innerModal">Datos de Comprador</h2>
+            <section class="fields">
+              <div>Nombre: Joan Manuel</div>
+              <div>Apellido: Monterrey Flores</div>
+              <div>Telefono: +56 931289778</div>
+              <div>Correo: joanmonterrey@gmail.com </div>
+              <div>Dirección: Av. Presidente balmaceda 2720</div>
+            </section>
         `,
-        showConfirmButton: false,
-        background: "#BDE4F4"
+        showConfirmButton: false
       });
     }
   }
@@ -51,6 +51,7 @@ export default {
 </script>
 
 <style lang="sass">
+
 
 h2#innerModal
     margin-bottom: 33px;
@@ -61,5 +62,12 @@ h2#innerModal
   align-items: flex-start
   div
     padding: 7px
+
+a.right 
+    float: right
+    padding-right: 7%
+    padding-top: 6%
+
+  
    
 </style>

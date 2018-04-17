@@ -5,10 +5,7 @@
             <button type="submit" class="btn_green inside_input" >Buscar</button>
         </form>
         <div v-if="submitted">
-            <div v-if="datos.length == 0" class="aligned">
-                <div class="warning" >Producto no encontrado</div>
-            </div>
-            <div v-else>
+            <div v-if ="datos.length>0">
                 <div class="table">
                     <div class="table-row header">   
                         <div class="text th_element">SKU</div>
@@ -26,10 +23,13 @@
                     <p>Precio Promotora: <span>$ {{price_promotion}}</span></p> 
                 </div>
             </div>
-            <div v-if="errors && errors.length" class="aligned"> 
+            <div v-else-if="errors.length>0" class="aligned"> 
                 <div v-for="error of errors">
-                    <div class="warning" > {{error.message}} </div>
+                    <div class="warning"> {{error.message}} </div>
                 </div>
+            </div>
+            <div v-else class="aligned">
+                <div class="warning">Producto no encontrado.</div>
             </div>
         </div>
     </div>
@@ -71,9 +71,6 @@ export default {
         });
       this.newDatos = {};
       this.submitted = true;
-      /*this.price_detail = "$ " + this.datos[0].precio_detalle;
-        this.price_promotion = "$ " + this.datos[0].precio_promotora;
-        console.log(this.price_detail, this.price_promotion);  */
     }
   }
 };
@@ -97,9 +94,7 @@ export default {
     justify-content: center
 
 .warning
-    color:#fff
-    background-color: #fff
-    border-radius: 6px;
+    color: $orange
     padding: 10px;
     margin-top: 20px;
 
@@ -144,8 +139,8 @@ export default {
     font-size: 17px
 
 .precios
-    float: right
-    margin: 0 9%
+    text-align: end
+    margin: 0 10%
     p
        margin-bottom: 3px
        span
