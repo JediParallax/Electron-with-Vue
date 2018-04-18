@@ -102,6 +102,10 @@ a
     font-family: Dosis, sans-serif
     font-size: 19px
     color: $blue
+    &:focus
+      border-color: $green
+      box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+
 
 .btn_green
     @extend %btn
