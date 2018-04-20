@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import Consulta from "@/components/Consulta";
-import CargarVenta from "@/components/CargarVenta";
-import Configuracion from "@/components/Configuracion";
+import Consulta from "@/components/Consulta"
+import CargarVenta from "@/components/CargarVenta"
+import Configuracion from "@/components/Configuracion"
 
 export default {
   components: {
@@ -29,9 +29,9 @@ export default {
   name: "omni_k",
 
   data() {
-    return {};
+    return {}
   }
-};
+}
 </script>
 
 <style lang="sass">
@@ -46,13 +46,8 @@ html
   color: $blue
   font-family: Dosis, sans-serif
 
-a
-  text-decoration: none
-  color: $blue
-  &:hover
-    color: $green
-    cursor: pointer
-
++links($blue,$alt_white,$green,$green_hover)
+  
 .main
   display: flex
   flex-direction: column 
@@ -94,18 +89,18 @@ a
     height: 50px
     padding: 6px 12px
     border: 1px solid #ccc
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075)
-    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out
     font-size: 15px
     font-weight: 700
-    border-radius: 38px;
     font-family: Dosis, sans-serif
     font-size: 19px
     color: $blue
+    border-radius: 38px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075)
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out
+    caret-color: $green
     &:focus
       border-color: $green
       box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
-
 
 .btn_green
     @extend %btn

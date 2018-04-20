@@ -25,7 +25,10 @@
             </div>
             <div v-else-if="errors.length>0" class="aligned"> 
                 <div v-for="error of errors">
-                    <div class="warning"> {{error.message}} </div>
+                    <div class="warning"> 
+                        <p>Se ha encontrado el siguiente error:</p>   
+                        {{error.message}} 
+                    </div>
                 </div>
             </div>
             <div v-else class="aligned">
@@ -36,7 +39,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "axios"
 
 export default {
   name: "consulta",
@@ -48,32 +51,30 @@ export default {
       submitted: false,
       price_detail: "",
       price_promotion: ""
-    };
+    }
   },
   methods: {
     findProduct() {
       axios
         .get(`http://200.14.252.14:3000/stockBodega/${this.newDatos.sku}`)
         .then(response => {
-          this.datos = response.data;
+          this.datos = response.data
           if (this.datos.length > 0) {
-            this.price_detail = this.datos[0].precio_detalle;
-            this.price_promotion = this.datos[0].precio_promotora;
-            this.price_detail = parseInt(this.price_detail).toLocaleString();
-            this.price_promotion = parseInt(
-              this.price_promotion
-            ).toLocaleString();
+            this.price_detail = this.datos[0].precio_detalle
+            this.price_promotion = this.datos[0].precio_promotora
+            this.price_detail = parseInt(this.price_detail).toLocaleString()
+            this.price_promotion = parseInt(this.price_promotion).toLocaleString()
           }
         })
         .catch(e => {
-          this.errors.length = 0;
-          this.errors.push(e);
-        });
-      this.newDatos = {};
-      this.submitted = true;
+          this.errors.length = 0
+          this.errors.push(e)
+        })
+      this.newDatos = {}
+      this.submitted = true
     }
   }
-};
+}
 </script>
 
 <style lang="sass">

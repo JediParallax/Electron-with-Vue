@@ -14,6 +14,19 @@ $grey: rgba(67,91,113,.5) //gris transparentoso (font)
 $table_border: 1px solid #ccc;
 $orange: #ff9800 //araranjado 
 
+//colores de A
+=links($link,$visit, $hover, $active)
+    a 
+      color: $link
+      text-decoration: none
+      &:visited 
+        color: $visit
+      &:hover 
+        color: $hover
+        cursor: pointer
+      &:active 
+        color: $active
+
 //Estilos base de los botones
 %btn
     font-family: Dosis, sans-serif
@@ -36,6 +49,7 @@ $orange: #ff9800 //araranjado
     border-color: $color
     color: #fff
     border: 1px solid transparent
+        
 
 //mixin que define el color de un boton outlined
 =btn_outlined($color)
@@ -51,3 +65,4 @@ $orange: #ff9800 //araranjado
     color: #fff
     cursor: pointer
 
+    
