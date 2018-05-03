@@ -37,6 +37,8 @@ export default {
 <style lang="sass">
 
 @import "./globals/_reset"
+@import url('https://fonts.googleapis.com/css?family=Dosis')
+
 
 html
   width: 100%
@@ -117,6 +119,6 @@ html
 .inside_input
     position: absolute
     top: 85px
-    right: 22px
+    right: 20px
 
 </style>

@@ -1,7 +1,7 @@
 <template>
    <div class="container">
     <form class="formulario" >
-        <input type="text" name='codigoProducto' class="input_family"  placeholder="Ingrese número de boleta" >
+        <input type="text" v-model="numero_documento" name='codigoProducto' class="input_family"  placeholder="Ingrese número de boleta" >
         <button type="button"  class="btn_green inside_input" @click="loadSell()">Cargar</button>
     </form>
     <div v-if="submitted">
@@ -17,18 +17,35 @@
 </template>
 
 <script>
+import { ipcRenderer } from 'electron';
+
 export default {
   name: "cargarVenta",
   data() {
     return {
       errors: [],
-      submitted: false
+      submitted: false,
+      numero_documento: ''
     };
   },
 
   methods: {
     loadSell() {
-      this.submitted = true;
+
+      this.submitted = false;
+      //IMPRIMISMOS EN CONSOLA LA RESPUESTA RECIBIDA DESDE EL MAIN PROCEESS
+      ipcRenderer.on('sendSale', (event, arg) => {
+        console.log('respuesta recibida desde el main process',arg) // imprime "pong"
+      })
+
+      //ENVIAMOS EL NUMERO DE DOCUMENTO DE LA COMPRA, AL PROCESO PRINCIPAL PARA QUE BUSQUE EN LA BASE DE DATOS
+      ipcRenderer.send('getSale', this.numero_documento)
+
+      // ipcRenderer.removeAllListeners('sendSale')
+      // ipcRenderer.removeAllListeners('getSale')
+      
+      
+
     },
 
     displayModal() {
@@ -46,7 +63,12 @@ export default {
         showConfirmButton: false
       });
     }
-  }
+  },
+  // destroyer() {
+  //   ipcRenderer.removeAllListeners();
+  //   // ipcRenderer.removeAllListeners('getSale');
+  // }
+
 };
 </script>
 

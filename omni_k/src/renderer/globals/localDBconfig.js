@@ -3,6 +3,7 @@ const instance = os.hostname() + "\\" + "SQLEXPRESS"
 let sql = require("mssql/msnodesqlv8")
 
 export default {
+// module.exports = {
   // METODO PARA OBTENER UNA PROMESA QUE RETORNA UN ARRAY DE OBJETOS QUE CONTIENEN LOS NOMBRES DE LAS BASES DE DATOS
   getDatabases: async () => {
     const config_databases = {

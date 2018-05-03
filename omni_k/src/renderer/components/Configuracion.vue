@@ -6,16 +6,18 @@
 </template>
 
 <script>
-import localDBconfig from "@/globals/localDBconfig.js";
+// import localDBconfig from "@/globals/localDBconfig.js";
+
+
 export default {
   name: "configuracion",
-  components: { localDBconfig },
+  // components: { localDBconfig },
   data() {
     return {};
   },
 
   created() {
-    const { getDatabases } = require("@/globals/localDBconfig.js");
+    const { getDatabases } = require("../globals/localDBconfig.js");
     let options = "<option></option>";
     getDatabases.getDatabases("esto tiene que pasarse al modulo").then(data => {
       data.forEach(element => {
