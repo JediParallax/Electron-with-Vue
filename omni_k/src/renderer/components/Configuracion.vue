@@ -10,24 +10,16 @@ export default {
   name: "configuracion",
   data() {
     return {}
-  },
-
-  created() {
-    let options = "<option></option>"
-    getDatabases("esto tiene que pasarse al modulo").then(data => {
-      data.forEach(element => {
-        options += "<option>" + element.name + "</option>"
-      })
-      document.getElementById("select_dbs").innerHTML = options
-    })
   }
 }
 </script>
 
 <style lang="sass">
+
   .config_form
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
+
 </style>

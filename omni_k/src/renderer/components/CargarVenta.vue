@@ -1,8 +1,8 @@
 <template>
    <div class="container">
     <form class="formulario" >
-        <input type="text" name='codigoProducto' class="input_family"  placeholder="Ingrese número de boleta" >
-        <button type="submit"  class="btn_green inside_input" @submit.prevent="loadSale()">Cargar</button>
+        <input type="text" v-model="numero_documento" name='codigoProducto' class="input_family"  placeholder="Ingrese número de boleta" >
+        <button type="button"  class="btn_green inside_input"  @click="loadSale()">Cargar</button>
     </form>
     <div v-if="submitted">
         <div v-if="errors && errors.length" class="aligned"> 
@@ -13,49 +13,39 @@
         <div class="modal_links">
           <a @click="datosComprador()">Ver datos de comprador</a>
           <a @click="datosDoc()">Ver datos de documento</a>
-       </div>ñ
+       </div>
     </div> 
   </div>
 </template>
 
 <script>
+import { ipcRenderer } from "electron"
+
 export default {
   name: "cargarVenta",
   data() {
     return {
-      userData: [
-        {
-          nombre: "Joan Manuel",
-          lastName: "Monterrey Flores",
-          phone: "+56 931289778",
-          email: "joanmonterrey@gmail.com",
-          address: "Av. Presidente balmaceda 2720",
-          comuna: "Quinta Normal",
-          ciudad: "Santiago",
-          birthdate: "16/03/1993",
-          signdate: "01/15/2018",
-          address2: ""
-        },
-        {
-          numero: "2j23230i",
-          tipo: "tipo_doc",
-          fecha: "15/05/2018",
-          hora: "3:00pm",
-          codigo_tienda: "239488324"
-        },
-        {
-          codigo_producto: "jodq90d21",
-          cantidad: "35",
-          precio_total: "$10000"
-        }
-      ],
       errors: [],
-      submitted: false
+      submitted: false,
+      numero_documento: "",
+      sale: {}
     }
   },
 
   methods: {
     loadSale() {
+      //ENVIAMOS EL NUMERO DE DOCUMENTO DE LA COMPRA, AL PROCESO PRINCIPAL PARA QUE BUSQUE EN LA BASE DE DATOS
+      ipcRenderer.send("getSale", this.numero_documento)
+
+      //IMPRIMISMOS EN CONSOLA LA RESPUESTA RECIBIDA DESDE EL MAIN PROCEESS
+      ipcRenderer.on("sendSale", (event, arg) => {
+        //console.log("respuesta recibida desde el main process", arg) // imprime "pong"
+        this.sale = arg
+      })
+
+      // ipcRenderer.removeAllListeners('sendSale')
+      // ipcRenderer.removeAllListeners('getSale')
+
       this.submitted = true
     },
 
@@ -64,11 +54,11 @@ export default {
         html: `
             <h2 id="innerModal">Datos de Comprador</h2>
             <section class="fields">
-              <div>Nombre: ${this.userData[0].nombre}</div>
-              <div>Apellido: ${this.userData[0].lastName}</div>
-              <div>Telefono: ${this.userData[0].phone}</div>
-              <div>Correo: ${this.userData[0].email} </div>
-              <div>Dirección: ${this.userData[0].address}</div>
+              <div>Nombre: ${this.sale.cliente.nombre}</div>
+              <div>RUT: ${this.sale.cliente.rut}</div>
+              <div>Telefono: ${this.sale.cliente.celular}</div>
+              <div>Correo: ${this.sale.cliente.email} </div>
+              <div>Dirección: ${this.sale.cliente.direccion}</div>
             </section>
         `,
         showConfirmButton: false
@@ -79,17 +69,21 @@ export default {
         html: `
             <h2 id="innerModal">Datos del Documento</h2>
             <section class="fields">
-              <div>Número de Doc: ${this.userData[1].numero}</div>
-              <div>Tipo de Doc: ${this.userData[1].tipo}</div>
-              <div>Fecha de Doc: ${this.userData[1].fecha}</div>
-              <div>Hora de Doc: ${this.userData[1].hora} </div>
-              <div>Codigo de Tienda: ${this.userData[1].codigo_tienda}</div>
+              <div>Número de Doc: ${this.sale.numero_doc}</div>
+              <div>Tipo de Doc: ${this.sale.tipo_doc}</div>
+              <div>Fecha de Doc: ${this.sale.fecha_doc}</div>
+              <div>Hora de Doc: ${this.sale.hora_doc} </div>
+              <div>Codigo de Tienda: ${this.sale.codigo_tienda}</div>
             </section>
         `,
         showConfirmButton: false
       })
     }
   }
+  // destroyer() {
+  //   ipcRenderer.removeAllListeners();
+  //   // ipcRenderer.removeAllListeners('getSale');
+  // }
 }
 </script>
 
