@@ -6,7 +6,6 @@
 </template>
 
 <script>
-import { config } from "@/globals/config.js"
 export default {
   name: "configuracion",
   data() {

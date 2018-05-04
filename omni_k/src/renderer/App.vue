@@ -3,11 +3,11 @@
     <div class="main">
       <div class="menu-icons">
         <div class="icons_left">
-          <router-link to="/"><img id="first_icon" class="icon_image" src="@assets/barcode_scanner.png" alt="Consultar Stock" title="Consultar Stock"></router-link>
-          <router-link to="/CargarVenta"><img class="icon_image" src="@assets/load.png" alt="Cargar Venta Omni" title="Cargar Venta Omni"></router-link>
+          <router-link to="/"><img id="first_icon" class="icon_image" src="@/assets/barcode_scanner.png" alt="Consultar Stock" title="Consultar Stock"></router-link>
+          <router-link to="/CargarVenta"><img class="icon_image" src="@/assets/load.png" alt="Cargar Venta Omni" title="Cargar Venta Omni"></router-link>
         </div>
         <div class="icons_right">
-          <router-link to="/Configuracion"><img class="icon_image" src="@assets/settings.png" alt="Configuración" title="Configuración"></router-link>
+          <router-link to="/Configuracion"><img class="icon_image" src="@/assets/settings.png" alt="Configuración" title="Configuración"></router-link>
         </div>
       </div>
       <router-view></router-view> 
@@ -36,7 +36,7 @@ export default {
 
 <style lang="sass">
 
-@import "@assets/sass/_reset"
+@import "./assets/sass/_reset"
 @import url('https://fonts.googleapis.com/css?family=Dosis')
 
 html
