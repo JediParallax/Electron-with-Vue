@@ -5,7 +5,10 @@
             <button type="submit" class="btn_green inside_input" >Buscar</button>
         </form>
         <div v-if="submitted">
-            <div v-if ="datos.length>0">
+            <div v-if="datos.length == 0 && errors.length == 0" class="aligned">
+                <div class="warning">Producto no encontrado.</div>
+            </div>
+            <div v-else-if="datos.length>0">
                 <div class="table">
                     <div class="table-row header">   
                         <div class="text th_element">SKU</div>
@@ -23,18 +26,13 @@
                     <p>Precio Promotora: <span>$ {{price_promotion}}</span></p> 
                 </div>
             </div>
-            <div v-else-if="errors.length>0" class="aligned"> 
-                <div v-for="error of errors">
-                    <div class="warning"> 
-                        <p>Se ha encontrado el siguiente error:</p>   
-                        {{error.message}} 
-                    </div>
+            <div v-else>
+                <div v-for="error of errors" class="warning aligned">
+                    <p>Se ha encontrado el siguiente error:</p>   
+                    <p>{{error.message}}</p> 
                 </div>
             </div>
-            <div v-else class="aligned">
-                <div class="warning">Producto no encontrado.</div>
-            </div>
-        </div>
+        </div>     
     </div>
 </template>
 
@@ -55,6 +53,7 @@ export default {
   },
   methods: {
     findProduct() {
+      this.submitted = true
       axios
         .get(`http://200.14.252.14:3000/stockBodega/${this.newDatos.sku}`)
         .then(response => {
@@ -71,7 +70,6 @@ export default {
           this.errors.push(e)
         })
       this.newDatos = {}
-      this.submitted = true
     }
   }
 }
@@ -92,7 +90,8 @@ export default {
       
 .aligned
     display: flex
-    justify-content: center
+    flex-direction: column;
+    align-items: center;
 
 .warning
     color: $orange
@@ -147,4 +146,6 @@ export default {
        span
            font-weight: bold        
            color: $green
+
+
 </style>

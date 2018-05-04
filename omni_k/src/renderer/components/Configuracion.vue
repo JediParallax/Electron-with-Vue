@@ -6,25 +6,23 @@
 </template>
 
 <script>
-import localDBconfig from "@/globals/localDBconfig.js";
+import { config } from "@/globals/config.js"
 export default {
   name: "configuracion",
-  components: { localDBconfig },
   data() {
-    return {};
+    return {}
   },
 
   created() {
-    const { getDatabases } = require("@/globals/localDBconfig.js");
-    let options = "<option></option>";
-    getDatabases.getDatabases("esto tiene que pasarse al modulo").then(data => {
+    let options = "<option></option>"
+    getDatabases("esto tiene que pasarse al modulo").then(data => {
       data.forEach(element => {
-        options += "<option>" + element.name + "</option>";
-      });
-      document.getElementById("select_dbs").innerHTML = options;
-    });
+        options += "<option>" + element.name + "</option>"
+      })
+      document.getElementById("select_dbs").innerHTML = options
+    })
   }
-};
+}
 </script>
 
 <style lang="sass">

@@ -3,11 +3,11 @@
     <div class="main">
       <div class="menu-icons">
         <div class="icons_left">
-          <router-link to="/"><img id="first_icon" class="icon_image" src="@/assets/barcode_scanner.png" alt="Consultar Stock" title="Consultar Stock"></router-link>
-          <router-link to="/CargarVenta"><img class="icon_image" src="@/assets/load.png" alt="Cargar Venta Omni" title="Cargar Venta Omni"></router-link>
+          <router-link to="/"><img id="first_icon" class="icon_image" src="@assets/barcode_scanner.png" alt="Consultar Stock" title="Consultar Stock"></router-link>
+          <router-link to="/CargarVenta"><img class="icon_image" src="@assets/load.png" alt="Cargar Venta Omni" title="Cargar Venta Omni"></router-link>
         </div>
         <div class="icons_right">
-          <router-link to="/Configuracion"><img class="icon_image" src="@/assets/settings.png" alt="Configuración" title="Configuración"></router-link>
+          <router-link to="/Configuracion"><img class="icon_image" src="@assets/settings.png" alt="Configuración" title="Configuración"></router-link>
         </div>
       </div>
       <router-view></router-view> 
@@ -36,7 +36,8 @@ export default {
 
 <style lang="sass">
 
-@import "./globals/_reset"
+@import "@assets/sass/_reset"
+@import url('https://fonts.googleapis.com/css?family=Dosis')
 
 html
   width: 100%
@@ -44,7 +45,7 @@ html
   overflow: hidden
   font-size: 19px
   color: $blue
-  font-family: Dosis, sans-serif
+  font-family: Dosis, Microsoft Sans serif
 
 +links($blue,$alt_white,$green,$green_hover)
   
@@ -91,7 +92,7 @@ html
     border: 1px solid #ccc
     font-size: 15px
     font-weight: 700
-    font-family: Dosis, sans-serif
+    font-family: Dosis, Microsoft Sans serif
     font-size: 19px
     color: $blue
     border-radius: 38px;
@@ -117,6 +118,6 @@ html
 .inside_input
     position: absolute
     top: 85px
-    right: 22px
+    right: 20px
 
 </style>

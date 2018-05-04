@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow } from "electron"
 
 /**
  * Set `__static` path to static files in production
@@ -7,52 +7,52 @@ import { app, BrowserWindow } from "electron";
 if (process.env.NODE_ENV !== "development") {
   global.__static = require("path")
     .join(__dirname, "/static")
-    .replace(/\\/g, "\\\\");
+    .replace(/\\/g, "\\\\")
 }
 
-let mainWindow;
+let mainWindow
 
 // Ruta de la ventana principal de la app
 const winURL =
   process.env.NODE_ENV === "development"
     ? `http://localhost:9080`
-    : `file://${__dirname}/index.html`;
+    : `file://${__dirname}/index.html`
 
 function createWindow() {
   mainWindow = new BrowserWindow({
     show: false,
     width: 400,
-    height: 480,
+    height: 520,
     x: 1200,
     y: 300,
     resizable: false
     // alwaysOnTop: true
-  });
+  })
 
   mainWindow.once("ready-to-show", () => {
-    mainWindow.show();
-  });
+    mainWindow.show()
+  })
 
-  mainWindow.loadURL(winURL);
+  mainWindow.loadURL(winURL)
 
   mainWindow.on("closed", () => {
-    mainWindow = null;
-  });
+    mainWindow = null
+  })
 }
 
-app.on("ready", createWindow);
+app.on("ready", createWindow)
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
-    app.quit();
+    app.quit()
   }
-});
+})
 
 app.on("activate", () => {
   if (mainWindow === null) {
-    createWindow();
+    createWindow()
   }
-});
+})
 
 /**
  * Auto Updater
