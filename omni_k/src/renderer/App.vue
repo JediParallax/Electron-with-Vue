@@ -10,7 +10,9 @@
           <router-link to="/Configuracion"><img class="icon_image" src="@/assets/settings.png" alt="Configuración" title="Configuración"></router-link>
         </div>
       </div>
+      <transition name="component-fade" mode="out-in">
       <router-view></router-view> 
+      </transition>
     </div>
   </div>
 </template>
@@ -36,6 +38,7 @@ export default {
 
 <style lang="sass">
 
+@import url('https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css')
 @import "./assets/sass/_reset"
 @import url('https://fonts.googleapis.com/css?family=Dosis')
 
@@ -53,7 +56,22 @@ html
   display: flex
   flex-direction: column 
   height: 100%
-  
+
+.title
+    text-align: center;
+    padding-top: 8px;
+
+.container
+    display: flex
+    flex: 1 1 auto
+    flex-direction: column
+           
+.formulario
+    display: flex;
+    justify-content: center
+    flex: 0 0 5%
+    margin-top: 20px
+
 .menu-icons
     background-color: $blue
     display: flex
@@ -84,6 +102,16 @@ html
   transition: all .2s ease-in-out
   &:hover 
     transform: rotate(20deg)
+      
+.aligned
+    display: flex
+    flex-direction: column;
+    align-items: center;
+
+.warning
+    color: $orange
+    padding: 10px;
+    margin-top: 20px;
 
 .input_family
     width: 90%
@@ -102,6 +130,11 @@ html
     &:focus
       border-color: $green
       box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+  
+.inside_input
+    position: absolute
+    top: 130px
+    right: 20px
 
 .btn_green
     @extend %btn
@@ -115,9 +148,14 @@ html
     &:hover
       +btn_hover($green_hover)
   
-.inside_input
-    position: absolute
-    top: 85px
-    right: 20px
+label 
+  padding-bottom: 5px
+
+.component-fade-enter-active, .component-fade-leave-active
+  transition: opacity .3s ease
+
+.component-fade-enter, .component-fade-leave-to
+  opacity: 0
+
 
 </style>

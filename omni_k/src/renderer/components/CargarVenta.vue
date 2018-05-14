@@ -1,20 +1,25 @@
 <template>
    <div class="container">
+       <h2 class="title">Cargar Venta</h2>
     <form class="formulario" >
         <input type="text" v-model="numero_documento" name='codigoProducto' class="input_family"  placeholder="Ingrese número de boleta" >
         <button type="button"  class="btn_green inside_input"  @click="loadSale()">Cargar</button>
     </form>
-    <div v-if="submitted">
-        <div v-if="errors && errors.length" class="aligned"> 
-            <div v-for="error of errors">
-                <div class="warning"> {{error.message}} </div>
-            </div>
-        </div> 
+    <div v-show="result">
         <div class="modal_links">
           <a @click="datosComprador()">Ver datos de comprador</a>
           <a @click="datosDoc()">Ver datos de documento</a>
        </div>
-    </div> 
+    </div>
+     <div class="aligned" v-show="notFoundMessage">
+        <div class='warning'>Boleta no encontrada.</div>
+     </div>
+     <!-- <div v-if="this.errors.length > 0">
+         <div v-for="error of errors" class="warning aligned">
+            <p>Se ha encontrado el siguiente error:</p>   
+            <p>{{error.message}}</p> 
+         </div>
+     </div> -->
   </div>
 </template>
 
@@ -26,7 +31,8 @@ export default {
   data() {
     return {
       errors: [],
-      submitted: false,
+      result: false,
+      notFoundMessage: false,
       numero_documento: "",
       sale: {}
     }
@@ -39,14 +45,18 @@ export default {
 
       //IMPRIMISMOS EN CONSOLA LA RESPUESTA RECIBIDA DESDE EL MAIN PROCEESS
       ipcRenderer.on("sendSale", (event, arg) => {
-        //console.log("respuesta recibida desde el main process", arg) // imprime "pong"
         this.sale = arg
+        if (this.sale.length > 0) {
+          /*  this.errors.length = 0 */
+          this.notFoundMessage = false
+          this.result = true
+        } else {
+          /*   this.errors.length = 0 */
+          this.result = true
+          this.notFoundMessage = false
+          console.log(this.sale)
+        }
       })
-
-      // ipcRenderer.removeAllListeners('sendSale')
-      // ipcRenderer.removeAllListeners('getSale')
-
-      this.submitted = true
     },
 
     datosComprador() {
