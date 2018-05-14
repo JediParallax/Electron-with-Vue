@@ -33,58 +33,62 @@ export default {
       FROM DOCUMENTS AS D INNER JOIN CLIENTS AS C ON D.CLCODI=C.CLCODI
       WHERE D.TIBOLETA = ${num_doc}         
     `
-    // INSTANCIAMOS LA CONEXION QUE LA USAREMOS PARA 2 QUERYS
-    const pool_sale = await sql.connect(config_sale)
+    try {
+      // INSTANCIAMOS LA CONEXION QUE LA USAREMOS PARA 2 QUERYS
+      const pool_sale = await sql.connect(config_sale)
 
-    const result_sale_details = await pool_sale.request().query(query_sale_details)
+      const result_sale_details = await pool_sale.request().query(query_sale_details)
 
-    // Creamos un nuevo objeto con el detalle de la venta y cliente
-    let sale = new Object();
-    sale.cliente = {
-      tipo: result_sale_details.recordset[0].tipo,
-      venta_omni: result_sale_details.recordset[0].venta_omni,      
-      codigo: result_sale_details.recordset[0].codigo,
-      rut: result_sale_details.recordset[0].rut,
-      nombre: result_sale_details.recordset[0].nombre,
-      direccion: result_sale_details.recordset[0].direccion,
-      comuna: result_sale_details.recordset[0].comuna,
-      ciudad: result_sale_details.recordset[0].ciudad,
-      telefono: result_sale_details.recordset[0].telefono,
-      celular: result_sale_details.recordset[0].celular,
-      email: result_sale_details.recordset[0].email,
-      fecha_nacimiento: result_sale_details.recordset[0].fecha_nacimiento,
-      fecha_registro: result_sale_details.recordset[0].fecha_registro
-    }
-    sale.documento = {
-      numero: result_sale_details.recordset[0].numero_doc,
-      tipo: result_sale_details.recordset[0].tipo_doc,
-      fecha: result_sale_details.recordset[0].fecha_doc,
-      hora: result_sale_details.recordset[0].hora_doc
-    }
+      // Creamos un nuevo objeto con el detalle de la venta y cliente
+      let sale = new Object();
+      sale.cliente = {
+        tipo: result_sale_details.recordset[0].tipo,
+        venta_omni: result_sale_details.recordset[0].venta_omni,
+        codigo: result_sale_details.recordset[0].codigo,
+        rut: result_sale_details.recordset[0].rut,
+        nombre: result_sale_details.recordset[0].nombre,
+        direccion: result_sale_details.recordset[0].direccion,
+        comuna: result_sale_details.recordset[0].comuna,
+        ciudad: result_sale_details.recordset[0].ciudad,
+        telefono: result_sale_details.recordset[0].telefono,
+        celular: result_sale_details.recordset[0].celular,
+        email: result_sale_details.recordset[0].email,
+        fecha_nacimiento: result_sale_details.recordset[0].fecha_nacimiento,
+        fecha_registro: result_sale_details.recordset[0].fecha_registro
+      }
+      sale.documento = {
+        numero: result_sale_details.recordset[0].numero_doc,
+        tipo: result_sale_details.recordset[0].tipo_doc,
+        fecha: result_sale_details.recordset[0].fecha_doc,
+        hora: result_sale_details.recordset[0].hora_doc
+      }
 
-    //QUERY 2: OBTENER LOS DATOS DE LA TIENDA
-    let query_sale_store = `
+      //QUERY 2: OBTENER LOS DATOS DE LA TIENDA
+      let query_sale_store = `
       SELECT CLCODI as codigo, CLNOM as nombre, CLADRE as direccion, CLPOBL as region FROM dbo.CLIENTS WHERE CLOBS='TIENDA' AND CLCODI LIKE '${result_sale_details.recordset[0].codigo_tienda}-%'
     `
-    const result_sale_store = await pool_sale.request().query(query_sale_store)
-    sale.tienda = {
-      codigo: result_sale_store.recordset[0].codigo,
-      nombre: result_sale_store.recordset[0].nombre,
-      direccion: result_sale_store.recordset[0].direccion,
-      region: result_sale_store.recordset[0].region,
-    }
+      const result_sale_store = await pool_sale.request().query(query_sale_store)
+      sale.tienda = {
+        codigo: result_sale_store.recordset[0].codigo,
+        nombre: result_sale_store.recordset[0].nombre,
+        direccion: result_sale_store.recordset[0].direccion,
+        region: result_sale_store.recordset[0].region,
+      }
 
-    //QUERY 3: para obtener los productos de la venta
-    let query_sale_products = `
-    SELECT DL.ARCODI as codigo, DL.ARDEST as itemname, DL.TLCODI as cantidad, DL.TLTOT as precio_total 
-    FROM DOCUMENTS_LINES AS DL INNER JOIN DOCUMENTS AS D ON DL.TICODI=D.TICODI AND DL.TLDATA=D.TIDATA 
-    WHERE D.TIBOLETA= '${sale.documento.numero}' 
-    ORDER BY DL.ARCODI
+      //QUERY 3: para obtener los productos de la venta
+      let query_sale_products = `
+      SELECT DL.ARCODI as codigo, DL.ARDEST as itemname, DL.TLQTT as cantidad, DL.TLTOT as precio_total 
+      FROM DOCUMENTS_LINES AS DL INNER JOIN DOCUMENTS AS D ON DL.TICODI=D.TICODI AND DL.TLDATA=D.TIDATA 
+      WHERE D.TIBOLETA= '${sale.documento.numero}' 
+      ORDER BY DL.ARCODI
     `
-    const result_sale_products = await pool_sale.request().query(query_sale_products)
-    //AGREGAMOS LOS PRODUCTOS AL OBJETO SALE
-    sale.skus = result_sale_products.recordset
-    sql.close()
-    return sale
+      const result_sale_products = await pool_sale.request().query(query_sale_products)
+      //AGREGAMOS LOS PRODUCTOS AL OBJETO SALE
+      sale.skus = result_sale_products.recordset
+      sql.close()
+      return sale
+    } catch (err) {
+      return err
+    }
   } 
 }
