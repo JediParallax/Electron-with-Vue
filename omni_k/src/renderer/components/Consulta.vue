@@ -11,7 +11,7 @@
                     <div class="text th_element">SKU</div>
                     <div class="text th_element">Cantidad</div>
                 </div>
-                <div class="table-body">
+                <div class="table-body" id="consultaTableSize">
                     <div class="table-row" v-for='dato in datos' :class="newDatos.sku == dato.barcode ? 'highlight' : '' ">     
                         <div class="text td_element">{{dato.sku}}</div>
                         <div class="text td_element">{{dato.cantidad}}</div>
@@ -71,6 +71,7 @@ export default {
             this.isError = false
             this.errors.length = 0
           }
+          h
         })
         .catch(e => {
           this.errors.length = 0
@@ -83,13 +84,7 @@ export default {
 
 <style lang="sass">
 
-.precios
-    text-align: end
-    margin: 0 10%
-    p
-       margin-bottom: 3px
-       span
-           font-weight: bold        
-           color: $green
+#consultaTableSize
+    max-height: 220px
 
 </style>

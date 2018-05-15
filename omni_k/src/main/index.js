@@ -22,11 +22,11 @@ const winURL =
 function createWindow() {
   mainWindow = new BrowserWindow({
     show: false,
-    width: 400,
+    width: 430,
     height: 560,
     x: 1200,
     y: 300,
-    resizable: false
+    resizable: true
     // alwaysOnTop: true
   })
 

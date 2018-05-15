@@ -13,16 +13,16 @@
        </div>
        <div class="table">
           <div class="table-row header">   
-              <div class="text th_element">Código</div>
-              <div class="text th_element" >Cant.</div>
-              <div class="text th_element">Precio</div>
+              <div class="text th_element bigger">Código</div>
+              <div class="text th_element">Cant.</div>
+              <div class="text th_element medium">Precio</div>
           </div>
-          <div class="table-body">
+          <div class="table-body" id="cargarVentaTableSize">
             <!-- estudiar flexbox otra vez para asignar el tamaño mas optimo para cada columna -->
               <div class="table-row" v-for='item in sale.skus'>     
-                  <div class="text td_element">{{item.codigo}}</div>
+                  <div class="text td_element bigger">{{item.codigo}}</div>
                   <div class="text td_element">{{item.cantidad}}</div>
-                  <div class="text td_element">{{item.precio_unitario_iva * item.cantidad}}</div>
+                  <div class="text td_element medium">$ {{price = parseInt(item.precio_unitario_iva * item.cantidad).toLocaleString()}}</div>
               </div>  
           </div>
        </div>
@@ -33,6 +33,7 @@
      <div class="aligned" v-show="notFoundMessage">
         <div class='warning'>Boleta no encontrada.</div>
      </div>
+    
      <!-- <div v-if="this.errors.length > 0">
          <div v-for="error of errors" class="warning aligned">
             <p>Se ha encontrado el siguiente error:</p>   
@@ -53,7 +54,8 @@ export default {
       result: false,
       notFoundMessage: false,
       numero_documento: "",
-      total_price: "",
+      price: 0,
+      total_price: 0,
       sale: {}
     }
   },
@@ -83,7 +85,7 @@ export default {
         html: `
             <h2 id="innerModal">Datos de Comprador</h2>
             <section class="fields">
-              <div>Nombre: ${this.sale.cliente.nombre}</div>
+              <div class="longName">Nombre: ${this.sale.cliente.nombre}</div>       
               <div>RUT: ${this.sale.cliente.rut}</div>
               <div>Telefono: ${this.sale.cliente.celular}</div>
               <div>Correo: ${this.sale.cliente.email} </div>
@@ -98,10 +100,10 @@ export default {
         html: `
             <h2 id="innerModal">Datos del Documento</h2>
             <section class="fields">
-              <div>Número de Doc: ${this.sale.numero_doc}</div>
-              <div>Tipo de Doc: ${this.sale.tipo_doc}</div>
-              <div>Fecha de Doc: ${this.sale.fecha_doc}</div>
-              <div>Hora de Doc: ${this.sale.hora_doc} </div>
+              <div>Tipo: ${this.sale.tipo_doc}</div>
+              <div>Número: ${this.sale.numero_doc}</div>
+              <div>Fecha: ${this.sale.fecha_doc}</div>
+              <div>Hora: ${this.sale.hora_doc} </div>
               <div>Codigo de Tienda: ${this.sale.codigo_tienda}</div>
             </section>
         `,
@@ -127,10 +129,20 @@ h2#innerModal
   align-items: flex-start
   div
     padding: 7px
+    white-space: nowrap
 
 .modal_links
     display: flex;
     justify-content: space-around
-    margin-top: 6%
-   
+    margin-top: 6%   
+
+#cargarVentaTableSize
+  max-height: 176px
+
+.bigger
+  flex: 3;
+
+.medium
+  flex: 2
+
 </style>

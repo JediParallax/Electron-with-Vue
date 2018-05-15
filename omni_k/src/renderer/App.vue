@@ -3,8 +3,8 @@
     <div class="main">
       <div class="menu-icons">
         <div class="icons_left">
-          <router-link to="/"><img id="first_icon" class="icon_image" src="@/assets/barcode_scanner.png" alt="Consultar Stock" title="Consultar Stock"></router-link>
-          <router-link to="/CargarVenta"><img class="icon_image" src="@/assets/load.png" alt="Cargar Venta Omni" title="Cargar Venta Omni"></router-link>
+          <router-link to="/" ><img id="first_icon" class="icon_image" src="@/assets/barcode_scanner.png" alt="Consultar Stock" title="Consultar Stock"></router-link>
+          <router-link to="/CargarVenta" ><img class="icon_image" src="@/assets/load.png" alt="Cargar Venta Omni" title="Cargar Venta Omni"></router-link>
         </div>
         <div class="icons_right">
           <router-link to="/Configuracion"><img class="icon_image" src="@/assets/settings.png" alt="Configuración" title="Configuración"></router-link>
@@ -168,7 +168,6 @@ label
 
 .table-body
     height: auto
-    max-height: 185px;
     border-top: 0
     overflow-y: scroll
 
@@ -191,7 +190,7 @@ label
     overflow: hidden
     border: $table_border
     justify-content: center
-    flex: 1 0 110px
+    flex: 1
     
 .td_element
     padding: 2.6px 0
@@ -200,6 +199,16 @@ label
 .highlight
     background: $blue
     color: $white
+
+.precios
+    text-align: end
+    margin: 0 10%
+    p
+       margin-bottom: 3px
+       span
+           font-weight: bold        
+           color: $green
+        
 
 
 </style>
