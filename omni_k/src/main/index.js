@@ -1,5 +1,4 @@
 import { ipcMain, app, BrowserWindow } from "electron"
-// import { getDatabases, getDetailsSale  }  from '../models/database.js'
 
 const os = require("os")
 let sql = require("mssql/msnodesqlv8")
@@ -24,7 +23,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     show: false,
     width: 400,
-    height: 520,
+    height: 560,
     x: 1200,
     y: 300,
     resizable: false
@@ -56,12 +55,10 @@ app.on("activate", () => {
   }
 })
 
-/**** ESTA PENDIENTE LA CONEXION A LA BASE DE DATOS PARA SETEAR LA BASE DE DATOS */
+/******* COMUNICACION CON COMPONENTES *********/
 
-/**** ESTA PENDIENTE EL GUARDAR EL NOMBRE DE LA BASE DE DATOS EN UN JSON Y EL METODO PARA ABRIR Y CARGAR ESE NOMBRE EN UNA VARIABLE ******/
 var database_name = "OnlineC1"
 
-/******* COMUNICACION CON COMPONENTES *********/
 ipcMain.on("getSale", (event, num_doc) => {
   ;(async function() {
     const config_sale = {
@@ -105,7 +102,7 @@ ipcMain.on("getSale", (event, num_doc) => {
 
     //QUERY 2: para obtener los productos de la venta
     let query_sale_products = `
-        SELECT DL.ARCODI as codigo, DL.ARDEST as itemname, DL.TLCODI as cantidad, DL.TLTOT as precio_total 
+        SELECT DL.ARCODI as codigo, DL.ARDEST as itemname, TLQTT as cantidad, DL.TLTOT as precio_unitario_iva
         FROM DOCUMENTS_LINES AS DL INNER JOIN DOCUMENTS AS D ON DL.TICODI=D.TICODI AND DL.TLDATA=D.TIDATA 
         WHERE D.TIBOLETA=${sale.numero_doc} 
         ORDER BY DL.ARCODI

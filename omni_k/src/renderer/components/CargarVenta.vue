@@ -1,15 +1,34 @@
 <template>
    <div class="container">
        <h2 class="title">Cargar Venta</h2>
-    <form class="formulario" >
+    <form class="formulario"  @submit.prevent="loadSale()">
         <input type="text" v-model="numero_documento" name='codigoProducto' class="input_family"  placeholder="Ingrese número de boleta" >
-        <button type="button"  class="btn_green inside_input"  @click="loadSale()">Cargar</button>
+        <button type="submit"  class="btn_green inside_input">Cargar</button>
+        <!-- barcode de ejemplo: 7800000179859 -->
     </form>
     <div v-show="result">
         <div class="modal_links">
           <a @click="datosComprador()">Ver datos de comprador</a>
           <a @click="datosDoc()">Ver datos de documento</a>
        </div>
+       <div class="table">
+          <div class="table-row header">   
+              <div class="text th_element">Código</div>
+              <div class="text th_element" >Cant.</div>
+              <div class="text th_element">Precio</div>
+          </div>
+          <div class="table-body">
+            <!-- estudiar flexbox otra vez para asignar el tamaño mas optimo para cada columna -->
+              <div class="table-row" v-for='item in sale.skus'>     
+                  <div class="text td_element">{{item.codigo}}</div>
+                  <div class="text td_element">{{item.cantidad}}</div>
+                  <div class="text td_element">{{item.precio_unitario_iva * item.cantidad}}</div>
+              </div>  
+          </div>
+       </div>
+       <div class="precios">
+          <p>Precio total <span>$ {{0}}</span></p>
+       </div> 
     </div>
      <div class="aligned" v-show="notFoundMessage">
         <div class='warning'>Boleta no encontrada.</div>
@@ -34,6 +53,7 @@ export default {
       result: false,
       notFoundMessage: false,
       numero_documento: "",
+      total_price: "",
       sale: {}
     }
   },
@@ -46,19 +66,18 @@ export default {
       //IMPRIMISMOS EN CONSOLA LA RESPUESTA RECIBIDA DESDE EL MAIN PROCEESS
       ipcRenderer.on("sendSale", (event, arg) => {
         this.sale = arg
-        if (this.sale.length > 0) {
+        if (this.sale.length == 0) {
           /*  this.errors.length = 0 */
-          this.notFoundMessage = false
-          this.result = true
+          this.result = false
+          this.notFoundMessage = true
         } else {
           /*   this.errors.length = 0 */
-          this.result = true
           this.notFoundMessage = false
-          console.log(this.sale)
+          this.result = true
         }
+        this.numero_documento = ""
       })
     },
-
     datosComprador() {
       this.$swal({
         html: `
@@ -99,7 +118,6 @@ export default {
 
 <style lang="sass">
 
-
 h2#innerModal
     margin-bottom: 33px;
   
@@ -114,6 +132,5 @@ h2#innerModal
     display: flex;
     justify-content: space-around
     margin-top: 6%
-
    
 </style>

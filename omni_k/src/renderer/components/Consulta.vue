@@ -12,10 +12,7 @@
                     <div class="text th_element">Cantidad</div>
                 </div>
                 <div class="table-body">
-                    <div class="table-row" 
-                        v-for='dato in datos'
-                        :class="newDatos.sku == dato.barcode ? 'highlight' : '' "
-                    >     
+                    <div class="table-row" v-for='dato in datos' :class="newDatos.sku == dato.barcode ? 'highlight' : '' ">     
                         <div class="text td_element">{{dato.sku}}</div>
                         <div class="text td_element">{{dato.cantidad}}</div>
                     </div>  
@@ -86,46 +83,6 @@ export default {
 
 <style lang="sass">
 
-.table
-    margin: 17px
-    transition: all .2s ease-out
-    border: $table_border
-    box-shadow: 0 2px 43px -4px rgba(0,0,0,.19)
-    &:hover
-        transform: translateY(2px);
-        box-shadow: 0 2px 5px rgba(0,0,0,.1), 0 1px 2px rgba(0,0,0,.05)
-
-.table-body
-    height: auto
-    max-height: 185px;
-    border-top: 0
-    overflow-y: scroll
-
-.table-row
-    display: flex         
-    width: 100%
-  
-.header 
-    background-color: $white
-    font-weight: bold
-    border-bottom: 0
-    overflow-y: scroll
-    .th_element
-        padding: 7px 0
-        font-weight: bolder;
-        font-size: 18px;
-         
-.text 
-    display: flex    
-    overflow: hidden
-    border: $table_border
-    justify-content: center
-    flex: 1 0 110px
-    
-.td_element
-    padding: 2.6px 0
-    font-size: 17px
-
 .precios
     text-align: end
     margin: 0 10%
@@ -134,9 +91,5 @@ export default {
        span
            font-weight: bold        
            color: $green
-        
-.highlight
-    background: $blue
-    color: $white
 
 </style>
