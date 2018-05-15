@@ -31,13 +31,11 @@ export default {
 
   methods: {
     loadSell() {
-
       this.submitted = false;
       //IMPRIMISMOS EN CONSOLA LA RESPUESTA RECIBIDA DESDE EL MAIN PROCEESS
       ipcRenderer.on('sendSale', (event, arg) => {
         console.log('respuesta recibida desde el main process',arg) // imprime "pong"
       })
-
       //ENVIAMOS EL NUMERO DE DOCUMENTO DE LA COMPRA, AL PROCESO PRINCIPAL PARA QUE BUSQUE EN LA BASE DE DATOS
       ipcRenderer.send('getSale', this.numero_documento)
 

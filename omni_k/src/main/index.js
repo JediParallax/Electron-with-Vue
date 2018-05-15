@@ -77,8 +77,6 @@ ipcMain.on('getSale', (event, num_doc) => {
       WHERE D.TIBOLETA = ${num_doc}         
     `
     // INSTANCIAMOS LA CONEXION QUE LA USAREMOS PARA 2 QUERYS
-    
-  
     const pool_sale = await sql.connect(config_sale)
     const result_sale_details = await pool_sale.request().query(query_sale_details)
     let sale = new Object();
@@ -103,13 +101,7 @@ ipcMain.on('getSale', (event, num_doc) => {
       fecha: result_sale_details.recordset[0].fecha_doc,
       hora: result_sale_details.recordset[0].hora_doc
     }       
-      // console.log(err);
-      // event.sender.send('sendSale', err);
-  
-
     // Creamos un nuevo objeto con el detalle de la venta y cliente
-
-
       //QUERY 2: OBTENER LOS DATOS DE LA TIENDA
     let query_sale_store = `SELECT CLCODI as codigo, CLNOM as nombre, CLADRE as direccion, CLPOBL as region FROM dbo.CLIENTS WHERE CLOBS='TIENDA' AND CLCODI LIKE '${result_sale_details.recordset[0].codigo_tienda}-%' `
     const result_sale_store = await pool_sale.request().query(query_sale_store)
@@ -119,7 +111,6 @@ ipcMain.on('getSale', (event, num_doc) => {
       direccion: result_sale_store.recordset[0].direccion,
       region: result_sale_store.recordset[0].region,
     }
-
     //QUERY 3: para obtener los productos de la venta
     let query_sale_products = `
       SELECT DL.ARCODI as codigo, DL.ARDEST as itemname, DL.TLQTT as cantidad, DL.TLTOT as precio_total 
@@ -134,10 +125,10 @@ ipcMain.on('getSale', (event, num_doc) => {
     return sale
     event.sender.send('sendSale', sale);
   })()
-  sql.on('error', err => {
-    // ... error handler
-    console.log(err);
-  })
+  // sql.on('error', err => {
+  //   // ... error handler
+  //   console.log(err);
+  // })
 })
 
 

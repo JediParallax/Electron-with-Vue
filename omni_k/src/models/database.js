@@ -33,7 +33,6 @@ export default {
       FROM DOCUMENTS AS D INNER JOIN CLIENTS AS C ON D.CLCODI=C.CLCODI
       WHERE D.TIBOLETA = ${num_doc}         
     `
-    try {
       // INSTANCIAMOS LA CONEXION QUE LA USAREMOS PARA 2 QUERYS
       const pool_sale = await sql.connect(config_sale)
 
@@ -87,8 +86,5 @@ export default {
       sale.skus = result_sale_products.recordset
       sql.close()
       return sale
-    } catch (err) {
-      return err
-    }
-  } 
-}
+  }
+ } 
