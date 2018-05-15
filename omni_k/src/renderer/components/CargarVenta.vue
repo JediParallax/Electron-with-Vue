@@ -62,11 +62,14 @@ export default {
 
   methods: {
     loadSale() {
+      //INICIALMENTE ELIMINAMOS LOS RENDERER_PROCESS OYENTES que envian el numero de documento al MAIN_PROCESS
+      ipcRenderer.removeAllListeners('sendSale'); //THIS MERGE
       //ENVIAMOS EL NUMERO DE DOCUMENTO DE LA COMPRA, AL PROCESO PRINCIPAL PARA QUE BUSQUE EN LA BASE DE DATOS
       ipcRenderer.send("getSale", this.numero_documento)
 
       //IMPRIMISMOS EN CONSOLA LA RESPUESTA RECIBIDA DESDE EL MAIN PROCEESS
       ipcRenderer.on("sendSale", (event, arg) => {
+        console.log('DATOS ENVIADOS DESDE EL MAIN PROCESS: ',arg); //ONLY DEPURATION
         this.sale = arg
         if (this.sale.length == 0) {
           /*  this.errors.length = 0 */
@@ -79,6 +82,7 @@ export default {
         }
         this.numero_documento = ""
       })
+      
     },
     datosComprador() {
       this.$swal({
@@ -110,11 +114,10 @@ export default {
         showConfirmButton: false
       })
     }
+  },
+  destroyed: function () {
+    // ipcRenderer.removeAllListeners('sendSale');
   }
-  // destroyer() {
-  //   ipcRenderer.removeAllListeners();
-  //   // ipcRenderer.removeAllListeners('getSale');
-  // }
 }
 </script>
 
