@@ -147,6 +147,12 @@ html
     +btn_outlined($green) 
     &:hover
       +btn_hover($green_hover)
+
+.btn_blue_border
+    @extend %btn
+    +btn_outlined($blue) 
+    &:hover
+      +btn_hover($blue)
   
 label 
   padding-bottom: 5px
@@ -174,6 +180,12 @@ label
 .table-row
     display: flex         
     width: 100%
+  
+.bigger
+  flex: 3 !important
+
+.medium
+  flex: 2 !important
   
 .header 
     background-color: $white
@@ -205,10 +217,25 @@ label
     margin: 0 10%
     p
        margin-bottom: 3px
-       span
-           font-weight: bold        
-           color: $green
-        
+            
+.cifra
+    font-weight: bold        
+    color: $green
 
+h2.innerModal
+    margin-bottom: 33px;
+  
+.fields
+  display: flex
+  flex-flow: wrap column
+  align-items: flex-start
+  div
+    padding: 7px
+    white-space: nowrap
 
+.modal_links
+    display: flex;
+    justify-content: space-around
+    margin-top: 6%   
+    
 </style>

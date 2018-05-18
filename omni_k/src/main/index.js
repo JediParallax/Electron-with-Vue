@@ -23,10 +23,11 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     show: false,
     width: 430,
-    height: 560,
+    height: 580,
     x: 1200,
     y: 300,
-    resizable: true
+    resizable: true,
+    maximizable: false
     // alwaysOnTop: true
   })
 
@@ -57,7 +58,7 @@ app.on("activate", () => {
 
 /******* COMUNICACION CON COMPONENTES *********/
 
-var database_name = "RENCA_TPV"
+var database_name = "Renca_tpv"
 
 ipcMain.on("getSale", (event, num_doc) => {
   ;(async function() {
@@ -70,7 +71,7 @@ ipcMain.on("getSale", (event, num_doc) => {
     }
     //QUERY 1: para obtener el detalle de la venta
     let query_sale_details = `
-      SELECT D.BOCODI as codigo_tienda, D.TIPDOC as tipo_doc, D.TICODI as correlativo_doc, D.TIBOLETA as numero_doc, CONVERT(VARCHAR(10),D.TIDATA,120) as fecha_doc, D.TIHORA as hora_doc, 
+      SELECT D.BOCODI as codigo_tienda, D.TIPDOC as tipo_doc, D.TICODI as correlativo_doc, D.TIBOLETA as numero_doc, CONVERT(VARCHAR(10),D.TIDATA,120) as fecha_doc, D.TIHORA as hora_doc, D.TITOT as precio_total, 
       C.CLCODI as codigo, C.CLDNI as rut, C.CLNOM as nombre, C.CLADRE as direccion, C.CLPROV as comuna, C.CLPOBL as ciudad, C.CLTARF as tipo, C.CLPROP16 as venta_omni, 
       C.CLTEF as telefono, C.CLMOVIL as celular, C.CLEMAIL as email, CONVERT(VARCHAR(10),C.CLFECHANAC,120) as fecha_nacimiento, CONVERT(VARCHAR(10),C.DULM,120) as fecha_registro
       FROM DOCUMENTS AS D INNER JOIN CLIENTS AS C ON D.CLCODI=C.CLCODI
@@ -78,7 +79,7 @@ ipcMain.on("getSale", (event, num_doc) => {
     `
     //QUERY 2: para obtener los productos de la venta
     let query_sale_products = `
-      SELECT DL.ARCODI as codigo, DL.ARDEST as itemname, TLQTT as cantidad, DL.TLTOT as precio_unitario_iva
+      SELECT DL.ARCODI as codigo, DL.ARDEST as itemname, DL.TLQTT as cantidad, DL.TLTOT as precio
       FROM DOCUMENTS_LINES AS DL INNER JOIN DOCUMENTS AS D ON DL.TICODI=D.TICODI AND DL.TLDATA=D.TIDATA 
       WHERE D.TIBOLETA=${num_doc}  
       ORDER BY DL.ARCODI
@@ -91,7 +92,6 @@ ipcMain.on("getSale", (event, num_doc) => {
       const result_sale_details = await pool_sale.request().query(query_sale_details)
       sale.cliente = {
         tipo: result_sale_details.recordset[0].tipo,
-        venta_omni: result_sale_details.recordset[0].venta_omni,
         codigo: result_sale_details.recordset[0].codigo,
         rut: result_sale_details.recordset[0].rut,
         nombre: result_sale_details.recordset[0].nombre,
@@ -108,7 +108,9 @@ ipcMain.on("getSale", (event, num_doc) => {
         numero: result_sale_details.recordset[0].numero_doc,
         tipo: result_sale_details.recordset[0].tipo_doc,
         fecha: result_sale_details.recordset[0].fecha_doc,
-        hora: result_sale_details.recordset[0].hora_doc
+        hora: result_sale_details.recordset[0].hora_doc,
+        precio_total: result_sale_details.recordset[0].precio_total,
+        venta_omni: result_sale_details.recordset[0].venta_omni
       }
 
       //REQUEST PRODUCTOS
@@ -116,27 +118,30 @@ ipcMain.on("getSale", (event, num_doc) => {
       sale.skus = result_sale_products.recordset
 
       //QUERY 3: OBTENER LOS DATOS DE LA TIENDA
-      let query_sale_store = `SELECT CLCODI as codigo, CLNOM as nombre, CLADRE as direccion, CLPOBL as region FROM dbo.CLIENTS WHERE CLOBS='TIENDA' AND CLCODI LIKE '${result_sale_details.recordset[0].codigo_tienda}-%' `
+      let query_sale_store = `SELECT CLCODI as codigo, CLNOM as nombre, CLADRE as direccion, CLPOBL as region FROM dbo.CLIENTS WHERE CLOBS='TIENDA' AND CLCODI LIKE '${
+        result_sale_details.recordset[0].codigo_tienda
+      }-%' `
       //REQUEST TIENDA
       const result_sale_store = await pool_sale.request().query(query_sale_store)
       sale.tienda = {
         codigo: result_sale_store.recordset[0].codigo,
         nombre: result_sale_store.recordset[0].nombre,
         direccion: result_sale_store.recordset[0].direccion,
-        region: result_sale_store.recordset[0].region,
+        region: result_sale_store.recordset[0].region
       }
 
-    //SI TODO SALIO BIEN, CERRAMOS LA CONEXION y ENVIAMOS EL OBJETO desde este MAIN PROCESS hacia el componenten CargarVenta (RENDER PROCESS)
+      //SI TODO SALIO BIEN, CERRAMOS LA CONEXION y ENVIAMOS EL OBJETO desde este MAIN PROCESS hacia el componenten CargarVenta (RENDER PROCESS)
       sql.close()
       event.sender.send("sendSale", sale)
-    }catch(e){
-      error['descripcion'] = 'ALGUNA CONSULTA ESTA IMCOMPLETA'
-      error['catch'] = e
-      sql.on('error', er => { error['err'] })
+    } catch (e) {
+      error["descripcion"] = "Se ha encontrado el siguiente error:"
+      error["catch"] = e
+      sql.on("error", er => {
+        error["err"]
+      })
       sql.close()
       sale.error = error
-      event.sender.send("sendSale", sale)      
-    } 
+      event.sender.send("sendSale", sale)
+    }
   })()
-  // ipcMain.removeAllListeners()
 })
