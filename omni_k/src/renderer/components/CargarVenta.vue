@@ -33,10 +33,13 @@
      <div class="aligned" v-show="notFoundMessage">
         <div class='warning'>Boleta no encontrada.</div>
      </div>
-     <div v-if="this.errors.length > 0">
+     <div v-show="isError">
          <div v-for="error of errors" class="warning aligned">
             <p>{{error.descripcion}}</p>   
-            <p>{{error.catch.name}}, {{error.catch.code}}, {{error.catch.number}}, {{error.catch.state}} </p> 
+            <p>{{error.catch.name}}</p> 
+            <p>{{error.catch.code}}</p>
+            <p>{{error.catch.number}} </p>
+            <p>{{error.catch.state}} </p>
          </div>
      </div>
   </div>
@@ -53,6 +56,7 @@ export default {
       errors: [],
       result: false,
       notFoundMessage: false,
+      isError: false,
       numero_documento: "",
       sale: {},
       total_price: "",
@@ -76,18 +80,23 @@ export default {
         if (this.sale.skus) {
           this.errors.length = 0
           this.notFoundMessage = false
+          this.isError = false
           this.total_price = parseInt(this.sale.documento.precio_total).toLocaleString()
           this.result = true
         } else {
           this.errors.length = 0
+          this.isError = false
           this.result = false
           this.notFoundMessage = true
         }
         if (this.sale.error) {
-          this.notFoundMessage = false
-          this.result = false
-          this.errors.length = 0
-          this.errors.push(this.sale.error)
+          if (this.sale.error.catch.number) {
+            this.notFoundMessage = false
+            this.result = false
+            this.errors.length = 0
+            this.errors.push(this.sale.error)
+            this.isError = true
+          }
         }
         this.numero_documento = ""
       })
@@ -104,6 +113,7 @@ export default {
               timer: 1500
             })
             console.log(response)
+            this.result = false
           }
         })
         .catch(e => {
@@ -156,7 +166,7 @@ export default {
               <div>Número: ${this.sale.documento.numero}</div>
               <div>Fecha: ${this.sale.documento.fecha}</div>
               <div>Hora: ${this.sale.documento.hora} </div>
-              <div>Codigo de Tienda: ${this.sale.tienda.codigo}</div>
+              <div>Codigo de Tienda: ${this.sale.tienda.codigo_simple}</div>
             </section>
         `,
         showConfirmButton: false

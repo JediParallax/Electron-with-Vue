@@ -2,6 +2,7 @@ import { ipcMain, app, BrowserWindow } from "electron"
 
 const os = require("os")
 let sql = require("mssql/msnodesqlv8")
+var database_name = ""
 
 const instance = os.hostname() + "\\" + "SQLEXPRESS"
 
@@ -24,9 +25,9 @@ function createWindow() {
     show: false,
     width: 430,
     height: 580,
-    x: 1200,
-    y: 300,
-    resizable: true,
+    x: 800,
+    y: 50,
+    resizable: false,
     maximizable: false
     // alwaysOnTop: true
   })
@@ -56,19 +57,51 @@ app.on("activate", () => {
   }
 })
 
+/******* CONFIGURACION DE BASE DE DATOS *********/
+ipcMain.on("database", (event, arg) => {
+  ;(async () => {
+    let databases = ""
+    const config_databases = {
+      driver: "msnodesqlv8",
+      connectionString: `Driver=SQL Native Client;Server=${instance};Trusted_Connection=yes;`
+    }
+
+    const query_select_databases = "SELECT name  FROM sys.databases"
+
+    try {
+      const pool1 = await sql.connect(config_databases)
+      const result1 = await pool1.request().query(query_select_databases)
+      databases = result1.recordset
+      //SI TODO SALIO BIEN, CERRAMOS LA CONEXION y ENVIAMOS EL OBJETO desde este MAIN PROCESS hacia el componenten Configuracion (RENDER PROCESS)
+      sql.close()
+      event.sender.send("sentDB", databases)
+    } catch (e) {
+      sql.close()
+      console.log(e)
+      event.sender.send("sentDB", databases)
+    }
+  })()
+})
+
+ipcMain.on("selectedDatabase", (event, arg) => {
+  database_name = arg
+  console.log(database_name)
+})
 /******* COMUNICACION CON COMPONENTES *********/
 
-var database_name = "Renca_tpv"
+/* var database_name = "Renca_tpv" */
 
 ipcMain.on("getSale", (event, num_doc) => {
   ;(async function() {
     let sale = new Object()
     let error = new Object()
-
     const config_sale = {
+      /*  user: "ofaber",
+      password: "ResyaK2357", */
       driver: "msnodesqlv8",
       connectionString: `Driver=SQL Native Client;Server=${instance};Database=${database_name};Trusted_Connection=yes;`
     }
+    console.log(database_name)
     //QUERY 1: para obtener el detalle de la venta
     let query_sale_details = `
       SELECT D.BOCODI as codigo_tienda, D.TIPDOC as tipo_doc, D.TICODI as correlativo_doc, D.TIBOLETA as numero_doc, CONVERT(VARCHAR(10),D.TIDATA,120) as fecha_doc, D.TIHORA as hora_doc, D.TITOT as precio_total, 
@@ -118,7 +151,7 @@ ipcMain.on("getSale", (event, num_doc) => {
       sale.skus = result_sale_products.recordset
 
       //QUERY 3: OBTENER LOS DATOS DE LA TIENDA
-      let query_sale_store = `SELECT CLCODI as codigo, CLNOM as nombre, CLADRE as direccion, CLPOBL as region FROM dbo.CLIENTS WHERE CLOBS='TIENDA' AND CLCODI LIKE '${
+      let query_sale_store = `SELECT CLCODI as codigo, CLNOM as nombre, CLADRE as direccion, CASE WHEN CLPOBL='SANTIAGO' THEN 'S' ELSE 'R' END as region FROM dbo.CLIENTS  WHERE CLOBS='TIENDA' AND CLCODI LIKE '${
         result_sale_details.recordset[0].codigo_tienda
       }-%' `
       //REQUEST TIENDA
@@ -127,7 +160,8 @@ ipcMain.on("getSale", (event, num_doc) => {
         codigo: result_sale_store.recordset[0].codigo,
         nombre: result_sale_store.recordset[0].nombre,
         direccion: result_sale_store.recordset[0].direccion,
-        region: result_sale_store.recordset[0].region
+        region: result_sale_store.recordset[0].region,
+        codigo_simple: result_sale_details.recordset[0].codigo_tienda
       }
 
       //SI TODO SALIO BIEN, CERRAMOS LA CONEXION y ENVIAMOS EL OBJETO desde este MAIN PROCESS hacia el componenten CargarVenta (RENDER PROCESS)
