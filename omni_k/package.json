@@ -1,6 +1,6 @@
 {
   "name": "omni_k",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "author": "JediParallax <joanmonterre@gmail.com>",
   "description": "An electron-vue project",
   "main": "./dist/electron/main.js",
@@ -11,8 +11,10 @@
     "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
     "dev": "node .electron-vue/dev-runner.js",
     "pack": "npm run pack:main && npm run pack:renderer",
-    "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
-    "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
+    "pack:main":
+      "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
+    "pack:renderer":
+      "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
     "postinstall": ""
   },
   "build": {
@@ -21,9 +23,7 @@
     "directories": {
       "output": "build"
     },
-    "files": [
-      "dist/electron/**/*"
-    ],
+    "files": ["dist/electron/**/*"],
     "dmg": {
       "contents": [
         {

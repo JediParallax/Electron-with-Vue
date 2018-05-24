@@ -96,11 +96,10 @@ ipcMain.on("getSale", (event, num_doc) => {
     let sale = new Object()
     let error = new Object()
     const config_sale = {
-      /*  user: "ofaber",
-      password: "ResyaK2357", */
       driver: "msnodesqlv8",
       connectionString: `Driver=SQL Native Client;Server=${instance};Database=${database_name};Trusted_Connection=yes;`
     }
+
     console.log(database_name)
     //QUERY 1: para obtener el detalle de la venta
     let query_sale_details = `

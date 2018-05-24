@@ -3,8 +3,8 @@
     <h2 class="title">Configuración</h2>
     <div class="config_form" >
       <!-- <label>Elija una Bases de Datos: </label> -->
-      <select v-model="selectedDatabase" class="input_family">
-        <option value="selecciona">Elija una Bases de Datos</option>
+      <select v-model="selectedDatabase" @change="selectOfDBs" class="input_family">
+        <option selected value="selecciona">Elija una Bases de Datos</option>
         <option v-for="database in databases">
           {{database.name}}
         </option>
@@ -25,8 +25,19 @@ export default {
       selectedDatabase: ""
     }
   },
-  created() {
+  /*  created() {
     if (!this.database) {
+        ipcRenderer.send("database")
+        ipcRenderer.on("sentDB", (event, arg) => {
+          this.databases = arg
+          console.log(this.databases)
+          ipcRenderer.removeAllListeners("sentDB")
+          ipcRenderer.removeAllListeners("database")
+        })
+      }
+  }, */
+  computed: {
+    selectOfDBs() {
       ipcRenderer.send("database")
       ipcRenderer.on("sentDB", (event, arg) => {
         this.databases = arg
