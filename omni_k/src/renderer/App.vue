@@ -131,10 +131,7 @@ html
       border-color: $green
       box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
   
-.inside_input
-    position: absolute
-    top: 130px
-    right: 20px
+
 
 .btn_green
     @extend %btn
@@ -153,6 +150,16 @@ html
     +btn_outlined($blue) 
     &:hover
       +btn_hover($blue)
+
+.btn_orange
+    @extend %btn
+    +btn_color($orange)
+    &:hover
+      +btn_hover($orange_hover)
+
+.btn_in_swal
+  margin: 0 .3125em
+  padding: .625em 2em
   
 label 
   padding-bottom: 5px

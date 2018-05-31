@@ -3,7 +3,8 @@
     <h2 class="title">Configuración</h2>
     <div class="config_form" >
       <!-- <label>Elija una Bases de Datos: </label> -->
-      <select v-model="selectedDatabase" @change="selectOfDBs" class="input_family">
+      {{selectOfDBs}}
+      <select v-model="selectedDatabase" class="input_family">
         <option selected value="selecciona">Elija una Bases de Datos</option>
         <option v-for="database in databases">
           {{database.name}}
@@ -51,10 +52,13 @@ export default {
     modalDisplay() {
       this.$swal({
         title: "¿Deséa configurar esta Base de datos por defecto?",
-        type: "warning",
+        type: "question",
         showCancelButton: true,
-        confirmButtonText: "Enviar",
-        cancelButtonText: "No Enviar",
+        buttonsStyling: false,
+        confirmButtonText: "Configurar",
+        confirmButtonClass: "btn_green btn_in_swal",
+        cancelButtonText: "Cancelar",
+        cancelButtonClass: "btn_orange btn_in_swal",
         showCloseButton: true,
         allowOutsideClick: () => !this.$swal.isLoading()
       })

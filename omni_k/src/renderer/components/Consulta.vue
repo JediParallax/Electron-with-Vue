@@ -89,4 +89,9 @@ export default {
 #consultaTableSize
     max-height: 221px
 
+.inside_input
+    position: absolute
+    top: 130px
+    right: 20px
+
 </style>
