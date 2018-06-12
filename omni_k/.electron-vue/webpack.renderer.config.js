@@ -58,7 +58,7 @@ let rendererConfig = {
               sass:
                 'vue-style-loader!css-loader!sass-loader?indentedSyntax=1&data=@import "./src/renderer/assets/sass/main.sass"',
               scss:
-                'vue-style-loader!css-loader!sass-loader?data=@import "./src/assets/sass/main.sass"'
+                'vue-style-loader!css-loader!sass-loader?data=@import "./src/renderer/assets/sass/main.sass"'
             }
           }
         }

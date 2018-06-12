@@ -18,10 +18,9 @@
 </template>
 
 <script>
-import Consulta from "@/components/Consulta"
-import CargarVenta from "@/components/CargarVenta"
-import Configuracion from "@/components/Configuracion"
-
+import Consulta from "@/components/Consulta";
+import CargarVenta from "@/components/CargarVenta";
+import Configuracion from "@/components/Configuracion";
 export default {
   components: {
     Consulta,
@@ -29,19 +28,16 @@ export default {
     Configuracion
   },
   name: "omni_k",
-
   data() {
-    return {}
+    return {};
   }
-}
+};
 </script>
 
 <style lang="sass">
-
 @import url('https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css')
 @import "./assets/sass/_reset"
 @import url('https://fonts.googleapis.com/css?family=Dosis')
-
 html
   width: 100%
   height: 100%
@@ -49,18 +45,15 @@ html
   font-size: 19px
   color: $blue
   font-family: Dosis, Microsoft Sans serif
-
 +links($blue,$alt_white,$green,$green_hover)
   
 .main
   display: flex
   flex-direction: column 
   height: 100%
-
 .title
     text-align: center;
     padding-top: 8px;
-
 .container
     display: flex
     flex: 1 1 auto
@@ -71,19 +64,16 @@ html
     justify-content: center
     flex: 0 0 5%
     margin-top: 20px
-
 .menu-icons
     background-color: $blue
     display: flex
     flex-direction: row
-
     .icons_left
       @extend %icons_properties
       justify-content: flex-start
       margin-left: 10px
       img
          margin: 10px 0 10px 8px
-
     .icons_right
       @extend %icons_properties
       justify-content: flex-end
@@ -97,7 +87,6 @@ html
     transition: all 1s ease-in-out
     &:hover
         transform: rotate(180deg);
-
 #first_icon
   transition: all .2s ease-in-out
   &:hover 
@@ -107,12 +96,10 @@ html
     display: flex
     flex-direction: column;
     align-items: center;
-
 .warning
     color: $orange
     padding: 10px;
     margin-top: 20px;
-
 .input_family
     width: 90%
     height: 50px
@@ -131,45 +118,36 @@ html
       border-color: $green
       box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
   
-
-
 .btn_green
     @extend %btn
     +btn_color($green)
     &:hover
       +btn_hover($green_hover)
-
 .btn_green_border
     @extend %btn
     +btn_outlined($green) 
     &:hover
       +btn_hover($green_hover)
-
 .btn_blue_border
     @extend %btn
     +btn_outlined($blue) 
     &:hover
       +btn_hover($blue)
-
 .btn_orange
     @extend %btn
     +btn_color($orange)
     &:hover
       +btn_hover($orange_hover)
-
 .btn_in_swal
   margin: 0 .3125em
   padding: .625em 2em
   
 label 
   padding-bottom: 5px
-
 .component-fade-enter-active, .component-fade-leave-active
   transition: opacity .3s ease
-
 .component-fade-enter, .component-fade-leave-to
   opacity: 0
-
 .table
     margin: 17px
     transition: all .2s ease-out
@@ -178,19 +156,16 @@ label
     &:hover
         transform: translateY(2px);
         box-shadow: 0 2px 5px rgba(0,0,0,.1), 0 1px 2px rgba(0,0,0,.05)
-
 .table-body
     height: auto
     border-top: 0
     overflow-y: scroll
-
 .table-row
     display: flex         
     width: 100%
   
 .bigger
   flex: 3 !important
-
 .medium
   flex: 2 !important
   
@@ -218,7 +193,6 @@ label
 .highlight
     background: $blue
     color: $white
-
 .precios
     text-align: end
     margin: 0 10%
@@ -228,7 +202,6 @@ label
 .cifra
     font-weight: bold        
     color: $green
-
 h2.innerModal
     margin-bottom: 33px;
   
@@ -239,7 +212,6 @@ h2.innerModal
   div
     padding: 7px
     white-space: nowrap
-
 .modal_links
     display: flex;
     justify-content: space-around

@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import axios from "axios"
+import axios from "axios";
 
 export default {
   name: "consulta",
@@ -51,37 +51,45 @@ export default {
       price_detail: "",
       price_promotion: "",
       buffNewDatos: ""
-    }
+    };
   },
   methods: {
     findProduct() {
       axios
-        .get(`http://200.14.252.14:3001/omni_prueba/stockBodega/${this.newDatos.sku}`)
+        .get(
+          `http://200.14.252.14:3001/omni_prueba/stockBodega/${
+            this.newDatos.sku
+          }`
+        )
         .then(response => {
-          this.datos = response.data
+          this.datos = response.data;
 
           if (this.datos.length > 0) {
-            this.notFoundMessage = false
-            this.result = true
-            this.price_detail = parseInt(this.datos[0].precio_detalle).toLocaleString()
-            this.price_promotion = parseInt(this.datos[0].precio_promotora).toLocaleString()
-            this.errors.length = 0
+            this.notFoundMessage = false;
+            this.result = true;
+            this.price_detail = parseInt(
+              this.datos[0].precio_detalle
+            ).toLocaleString();
+            this.price_promotion = parseInt(
+              this.datos[0].precio_promotora
+            ).toLocaleString();
+            this.errors.length = 0;
           } else {
-            this.result = false
-            this.notFoundMessage = true
-            this.errors.length = 0
+            this.result = false;
+            this.notFoundMessage = true;
+            this.errors.length = 0;
           }
         })
         .catch(e => {
-          this.errors.length = 0
-          this.errors.push(e)
-        })
+          this.errors.length = 0;
+          this.errors.push(e);
+        });
 
-      this.buffNewDatos = this.newDatos.sku
-      this.newDatos = {}
+      this.buffNewDatos = this.newDatos.sku;
+      this.newDatos = {};
     }
   }
-}
+};
 </script>
 
 <style lang="sass">

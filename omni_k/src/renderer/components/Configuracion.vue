@@ -17,35 +17,24 @@
 </template>
 
 <script>
-import { ipcRenderer } from "electron"
+import { ipcRenderer } from "electron";
 export default {
   name: "configuracion",
   data() {
     return {
       databases: {},
       selectedDatabase: ""
-    }
+    };
   },
-  /*  created() {
-    if (!this.database) {
-        ipcRenderer.send("database")
-        ipcRenderer.on("sentDB", (event, arg) => {
-          this.databases = arg
-          console.log(this.databases)
-          ipcRenderer.removeAllListeners("sentDB")
-          ipcRenderer.removeAllListeners("database")
-        })
-      }
-  }, */
   computed: {
     selectOfDBs() {
-      ipcRenderer.send("database")
+      ipcRenderer.send("database");
       ipcRenderer.on("sentDB", (event, arg) => {
-        this.databases = arg
-        console.log(this.databases)
-        ipcRenderer.removeAllListeners("sentDB")
-        ipcRenderer.removeAllListeners("database")
-      })
+        this.databases = arg;
+        console.log(this.databases);
+        ipcRenderer.removeAllListeners("sentDB");
+        ipcRenderer.removeAllListeners("database");
+      });
     }
   },
   methods: {
@@ -64,7 +53,7 @@ export default {
       })
         .then(result => {
           if (result.value) {
-            this.sendDB()
+            this.sendDB();
           }
         })
         .catch(e => {
@@ -72,9 +61,9 @@ export default {
             type: "error",
             title: "Ha ocurrido un inconveniente",
             showConfirmButton: false
-          })
-          this.$swal.showValidationError(e)
-        })
+          });
+          this.$swal.showValidationError(e);
+        });
     },
     sendDB() {
       if (this.selectedDatabase == "selecciona") {
@@ -83,19 +72,19 @@ export default {
           title: "Debe seleccionar una base de datos válida",
           showConfirmButton: false,
           timer: 2000
-        })
+        });
       } else {
-        ipcRenderer.send("selectedDatabase", this.selectedDatabase)
+        ipcRenderer.send("selectedDatabase", this.selectedDatabase);
         this.$swal({
           type: "success",
           title: "Hecho",
           showConfirmButton: false,
           timer: 1500
-        })
+        });
       }
     }
   }
-}
+};
 </script>
 
 <style lang="sass">
