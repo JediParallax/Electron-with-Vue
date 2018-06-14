@@ -71,7 +71,9 @@ app.on("activate", () => {
 
 /******* COMUNICACION CON COMPONENTES *********/
 
-
+ipcMain.on("modal", (event, arg) => {
+  event.sender.send("warningDB", database_name)
+})
 
 fetchDB()
 
@@ -80,15 +82,14 @@ ipcMain.on("selectedDatabase", (event, arg) => {
   if (database_name === undefined) {
     store.set('persistent_DB', arg)
     database_name = store.get('persistent_DB')
-    getSale(database_name)
   } else if (database_name != arg) {
     store.set('persistent_DB', arg)
     database_name = store.get('persistent_DB')
-    getSale(database_name)
   }
 })
+console.log("pase por aqui", database_name)
+getSale(database_name)
 
 
-
-
+//C:\Users\joanm\AppData\Roaming\Electron\default-database.json
 

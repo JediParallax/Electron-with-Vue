@@ -81,6 +81,7 @@ export function getSale(database_name) {
                     codigo_simple: result_sale_details.recordset[0].codigo_tienda
                 }
                 sale.instance = instance
+                sale.update = {}
 
                 //SI TODO SALIO BIEN, CERRAMOS LA CONEXION y ENVIAMOS EL OBJETO desde este MAIN PROCESS hacia el componenten CargarVenta (RENDER PROCESS)
 

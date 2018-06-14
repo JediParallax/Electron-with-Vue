@@ -79,8 +79,11 @@ export default {
           type: "success",
           title: "Hecho",
           showConfirmButton: false,
-          timer: 1500
+          timer: 4000
         });
+        this.$swal.showValidationError(
+          "Debe reiniciar la aplicación para mostrar los cambios de configuración de base de datos."
+        );
       }
     }
   }

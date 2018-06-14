@@ -1,7 +1,7 @@
 <template>
    <div class="container">
        <h2 class="title">Cargar Venta</h2>
-    <form class="formulario"  @submit.prevent="loadSale()">
+    <form class="formulario"  @submit.prevent="loadSale()" >
         <input type="text" v-model="numero_documento" name='codigoProducto' class="input_family"  placeholder="Ingrese número de boleta" >
         <button type="submit"  class="btn_green inside_input">Cargar</button>
         <!--  boleta de ejemplo: 4897 -->
@@ -26,7 +26,7 @@
           </div>
        </div>
        <div class="underTable">
-          <button @click ="alertDisplay()" class="btn_blue_border">Hacer Pedido Express</button>
+          <button @click ="inputFields()" class="btn_blue_border">Hacer Pedido Express</button>
           <p>Precio total: <span class="cifra">$ {{total_price}}</span></p>
        </div>
     </div>
@@ -57,11 +57,24 @@ export default {
       isError: false,
       numero_documento: "",
       sale: {},
+      saleUpdate: {},
       total_price: "",
       url: "http://200.14.252.14:3001/omni_prueba/VentaOmni/"
     };
   },
-
+  // si la base de datos no esta establecida, advierte con una ventana modal
+  created() {
+    ipcRenderer.send("modal");
+    ipcRenderer.on("warningDB", (event, arg) => {
+      if (arg === null) {
+        this.$swal({
+          type: "warning",
+          title: "Seleccione base de datos",
+          showConfirmButton: false
+        });
+      }
+    });
+  },
   methods: {
     loadSale() {
       //INICIALMENTE ELIMINAMOS LOS RENDERER_PROCESS OYENTES que envian el numero de documento al MAIN_PROCESS
@@ -98,55 +111,43 @@ export default {
       });
     },
     completeSale() {
-      if (
-        this.validations(
-          this.sale.cliente.email,
-          this.sale.cliente.rut,
-          this.sale.cliente.direccion
-        )
-      ) {
-        axios
-          .post(this.url, this.sale)
-          .then(response => {
-            if (response.data.success) {
-              this.$swal({
-                type: "success",
-                title: "Pedido express enviado",
-                showConfirmButton: false,
-                timer: 1500
-              });
-              console.log(response);
-              this.result = false;
-            }
-          })
-          .catch(e => {
+      axios
+        .post(this.url, this.sale)
+        .then(response => {
+          if (response.data.success) {
             this.$swal({
-              type: "error",
-              title: "Error al enviar pedido",
-              showConfirmButton: false
+              type: "success",
+              title: "Pedido express enviado",
+              showConfirmButton: false,
+              timer: 1500
             });
-            this.$swal.showValidationError(e);
-          });
-      } else
-        this.$swal({
-          title: "Datos del cliente incorrectos",
-          text: "¿Desea agregar o corregir datos del cliente?",
-          type: "warning",
-          buttonsStyling: false,
-          showCancelButton: true,
-          confirmButtonText: "Agregar",
-          confirmButtonClass: "btn_green btn_in_swal",
-          cancelButtonText: "Salir",
-          cancelButtonClass: "btn_orange btn_in_swal",
-          showCloseButton: true,
-          allowOutsideClick: () => !this.$swal.isLoading()
-        }).then(result => {
-          if (result.value) {
-            this.inputFields();
+            console.log(response);
+            this.result = false;
           }
+        })
+        .catch(e => {
+          this.$swal({
+            type: "error",
+            title: "Error al enviar pedido",
+            showConfirmButton: false
+          });
+          this.$swal.showValidationError(e);
         });
     },
-    alertDisplay() {
+    saleSendManager() {
+      if (this.sale.cliente.codigo == this.sale.tienda.codigo) {
+        this.$swal({
+          type: "error",
+          title: "Error en Punto de Venta",
+          text: "Anule la boleta e ingrese los datos del cliente correctamente",
+          showConfirmButton: false
+        });
+        this.$swal.showValidationError("RUT inválido en punto de venta");
+      } else {
+        this.completeSale();
+      }
+    },
+    preSend() {
       this.$swal({
         title: "¿Enviar Pedido Express?",
         text: "no podrás revertir esta opción",
@@ -158,10 +159,13 @@ export default {
         cancelButtonText: "No Enviar",
         cancelButtonClass: "btn_orange btn_in_swal",
         showCloseButton: true,
-        allowOutsideClick: () => !this.$swal.isLoading()
+        allowOutsideClick: false,
+        allowEscapeKey: false
       }).then(result => {
         if (result.value) {
-          this.completeSale();
+          this.saleSendManager();
+        } else {
+          this.inputFields();
         }
       });
     },
@@ -200,101 +204,117 @@ export default {
     inputFields: async function() {
       let flag = 0;
       const { value: formValues } = await this.$swal({
-        title: "Ingrese datos faltantes",
-        html:
-          '<form class="modalForm">' +
-          `<input class="input_family" name="email" type="email" id="swal_email" placeholder="email" required />` +
-          '<span id="first">*</span>' +
-          '<input class="input_family" name="rut" type="text" placeholder="RUT" id="swal_RUT"  required />' +
-          '<span id="second">*</span>' +
-          '<input class="input_family" name="direccio" type="text" placeholder="Dirección" id="swal_direccion" required />' +
-          '<span id="third">*</span>' +
-          '<input class="input_family" name="direccion_al" type="text" placeholder="Dirección Alternativa" id="swal_alt_direccion" />' +
-          '<input class="input_family" name="telefono" type="tel" placeholder="Teléfono" id="swal_telefono" />' +
-          '<input class="input_family" name="celular" type="tel" placeholder="Celular" id="swal_celular" />' +
-          "</form>",
+        title: "Verifique datos del cliente",
+        html: `<form class="modalForm">
+          <input class="input_family" name="email" type="email" id="swal_email" placeholder="email" required value=${
+            this.sale.cliente.email
+          } > 
+          <span id="first">*</span>
+          <input class="input_family" name="rut" type="text" placeholder="RUT" id="swal_RUT" value=${
+            this.sale.cliente.rut
+          } required />
+          <span id="second">*</span>
+          <input class="input_family" name="direccion" type="text" placeholder="Dirección" id="swal_direccion" value=${
+            this.sale.cliente.direccion
+          } required />
+          <span id="third">*</span>
+          <input class="input_family" name="direccion_al" type="text" placeholder="Dirección Alternativa" id="swal_alt_direccion" />
+          <input class="input_family" name="telefono" type="tel" placeholder="Teléfono" id="swal_telefono" value=${
+            this.sale.cliente.telefono
+          } >
+          <input class="input_family" name="celular" type="tel" placeholder="Celular" id="swal_celular" value=${
+            this.sale.cliente.celular
+          } >
+          </form> `,
         focusConfirm: false,
         buttonsStyling: false,
         showConfirmButton: true,
-        confirmButtonText: "Actualizar",
+        confirmButtonText: "Enviar",
         confirmButtonClass: "btn_blue_border",
         showCloseButton: true,
         showLoaderOnConfirm: true,
         focusConfirm: false,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
         footer:
           "<span>*</span>" + " Email, RUT y Dirección son campos obligatorios",
         preConfirm: () => {
-          var email = document.getElementById("swal_email").value;
-          if (this.validarVacio(email) && this.validarEmail(email)) {
-            this.sale.cliente.email = email;
+          var email = document.getElementById("swal_email");
+          if (
+            this.validarVacio(email.value) &&
+            this.validarEmail(email.value)
+          ) {
+            this.saleUpdate.email = email.value;
+            console.log(this.sale);
+            email.className = "input_family";
           } else {
             flag = 1;
             this.alertValidaciones(flag);
+            email.className = "inputError";
           }
 
-          let RUT = document.getElementById("swal_RUT").value;
-          if (this.validarVacio(RUT) && this.validaRut(RUT)) {
-            this.sale.cliente.rut = RUT;
+          let RUT = document.getElementById("swal_RUT");
+          if (this.validarVacio(RUT.value) && this.validaRut(RUT.value)) {
+            this.saleUpdate.rut = RUT.value;
+            RUT.className = "input_family";
           } else {
             flag = 2;
             this.alertValidaciones(flag);
+            RUT.className = "inputError";
           }
 
-          let address = document.getElementById("swal_direccion").value;
+          let address = document.getElementById("swal_direccion");
           let alt_address = document.getElementById("swal_alt_direccion").value;
-          if (this.validarVacio(address)) {
-            this.sale.cliente.direccion = address;
-            this.sale.cliente.direccion_alt = alt_address;
-            console.log(address, alt_address);
+          if (this.validarVacio(address.value)) {
+            this.saleUpdate.direccion = address.value;
+            this.sale.update.address_alt = alt_address;
+            address.className = "input_family";
+            console.log(address.value, alt_address);
           } else {
             flag = 3;
             this.alertValidaciones(flag);
+            address.className = "inputError";
           }
 
-          let phone = document.getElementById("swal_telefono").value;
-          console.log(phone);
-          if (phone == null || phone.length == 0 || /^\s+$/.test(phone))
+          let phone = document.getElementById("swal_telefono");
+          console.log(phone.value);
+          if (
+            phone.value == null ||
+            phone.value.length == 0 ||
+            /^\s+$/.test(phone.value)
+          ) {
             flag = 0;
-          else if (this.validarPhone(phone)) this.sale.cliente.telefono = phone;
-          else {
+            phone.className = "input_family";
+          } else if (this.validarPhone(phone.value)) {
+            this.saleUpdate.telefono = phone.value;
+            phone.className = "input_family";
+          } else {
             flag = 4;
             this.alertValidaciones(flag);
+            phone.className = "inputError";
           }
 
-          let cellphone = document.getElementById("swal_celular").value;
+          let cellphone = document.getElementById("swal_celular");
           if (
-            cellphone == null ||
-            cellphone.length == 0 ||
-            /^\s+$/.test(cellphone)
-          )
+            cellphone.value == null ||
+            cellphone.value.length == 0 ||
+            /^\s+$/.test(cellphone.value)
+          ) {
             flag = 0;
-          else if (this.validarPhone(cellphone))
-            this.sale.cliente.celular = cellphone;
-          else {
+            cellphone.className = "input_family";
+          } else if (this.validarPhone(cellphone.value)) {
+            this.saleUpdate.celular = cellphone.value;
+            cellphone.className = "input_family";
+          } else {
             flag = 5;
             this.alertValidaciones(flag);
+            cellphone.className = "inputError";
           }
         }
       });
       if (formValues) {
-        this.$swal({
-          title: "Datos Actualizados",
-          text: "¿Desea seguir con el Pedido Express?",
-          type: "success",
-          buttonsStyling: false,
-          showCancelButton: true,
-          confirmButtonText: "Hacer Pedido Express",
-          confirmButtonClass: "btn_green btn_in_swal",
-          cancelButtonText: "Aun no",
-          cancelButtonClass: "btn_orange btn_in_swal",
-          showCloseButton: true,
-          allowOutsideClick: () => !this.$swal.isLoading()
-        }).then(result => {
-          if (result.value) {
-            this.completeSale();
-          }
-        });
-        console.log(this.sale.cliente);
+        this.sale.update = this.saleUpdate;
+        this.preSend();
       }
     },
 
@@ -383,21 +403,6 @@ export default {
         console.log("no copiaron bien el número");
         return false;
       }
-    },
-    validations: function(email, rut, direccion) {
-      if (this.validarVacio(email) && this.validarEmail(email)) {
-        if (this.validarVacio(rut) && this.validaRut(rut)) {
-          if (this.validarVacio(direccion)) {
-            return true;
-          } else {
-            return false;
-          }
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
     }
   }
 };
@@ -417,7 +422,7 @@ export default {
     display: flex
     align-items: center
     flex-direction: column
-    .input_family, h2
+    input, h2
       margin-bottom: 5px
     
 span
@@ -435,6 +440,5 @@ span
 
 #third
   top: calc(100px + #{$top})
-
 
 </style>

@@ -101,22 +101,18 @@ html
     padding: 10px;
     margin-top: 20px;
 .input_family
-    width: 90%
-    height: 50px
-    padding: 6px 12px
+    @extend %inputBasis
     border: 1px solid #ccc
-    font-size: 15px
-    font-weight: 700
-    font-family: Dosis, Microsoft Sans serif
-    font-size: 19px
-    color: $blue
-    border-radius: 38px;
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075)
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out
-    caret-color: $green
     &:focus
-      border-color: $green
+      border: 1px solid $green
       box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+
+.inputError
+  @extend %inputBasis
+  border: 1px solid $error
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
   
 .btn_green
     @extend %btn

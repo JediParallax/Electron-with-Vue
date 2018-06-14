@@ -13,6 +13,7 @@ $grey: rgba(67,91,113,.5) //gris transparentoso (font)
 $table_border: 1px solid #ccc;
 $orange: #ffa31a //anaranjado 
 $orange_hover: #ff9800 //anaranjado hover
+$error: #ff7070 // rojo
 $top: 86px
 
 //mixin para colores de A
@@ -44,6 +45,18 @@ $top: 86px
     flex-direction: row
     flex: 1 1 auto
 
+%inputBasis
+    width: 90%
+    height: 50px
+    padding: 6px 12px
+    font-size: 15px
+    font-weight: 700
+    font-family: Dosis, Microsoft Sans serif
+    font-size: 19px
+    border-radius: 38px
+    color: $blue
+    caret-color: $green
+    
 //mixin que define el color de un boton
 =btn_color($color)
     background-color: $color
