@@ -7,7 +7,7 @@
           <router-link to="/CargarVenta" ><img class="icon_image" src="@/assets/load.png" alt="Cargar Venta Omni" title="Cargar Venta Omni"></router-link>
         </div>
         <div class="icons_right">
-          <router-link to="/Configuracion"><img class="icon_image" src="@/assets/settings.png" alt="Configuración" title="Configuración"></router-link>
+          <router-link to="/Configuracion" ><img   :class="[isActive ? 'pulse' : '', 'icon_image']"  src="@/assets/settings.png" alt="Configuración" title="Configuración"></router-link>
         </div>
       </div>
       <transition name="component-fade" mode="out-in">
@@ -21,6 +21,7 @@
 import Consulta from "@/components/Consulta";
 import CargarVenta from "@/components/CargarVenta";
 import Configuracion from "@/components/Configuracion";
+import { ipcRenderer } from "electron";
 export default {
   components: {
     Consulta,
@@ -29,13 +30,27 @@ export default {
   },
   name: "omni_k",
   data() {
-    return {};
-  }
+    return {
+      isActive: false
+    };
+  },
+
+  //Si la base de datos esta vacía, agrega una animación en el icono de Configuración
+  created() {
+    ipcRenderer.send("modal");
+    ipcRenderer.on("warningDB", (event, arg) => {
+      if (arg === null) {
+       this.isActive = true
+      }
+    ipcRenderer.removeAllListeners("modal");
+    ipcRenderer.removeAllListeners("warningDB");
+    });
+  },
+
 };
 </script>
 
 <style lang="sass">
-@import url('https://cdn.jsdelivr.net/npm/animate.css@3.5.2/animate.min.css')
 @import "./assets/sass/_reset"
 @import url('https://fonts.googleapis.com/css?family=Dosis')
 html
@@ -208,9 +223,27 @@ h2.innerModal
   div
     padding: 7px
     white-space: nowrap
+
 .modal_links
     display: flex;
     justify-content: space-around
     margin-top: 6%   
+
+.loader
+    width: 125px;
+    position: relative;
+    left: 164px;
+    top: 107px;
+
+@keyframes radial-pulse 
+  0% 
+    box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.5);
+
+  100% 
+    box-shadow: 0 0 0 30px rgba(0, 0, 0, 0);
+  
+.pulse
+  animation: radial-pulse 1.5s infinite;
+  border-radius: 100%
     
 </style>

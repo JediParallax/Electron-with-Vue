@@ -77,17 +77,14 @@ ipcMain.on("modal", (event, arg) => {
 
 fetchDB()
 
-/* if (database_name === undefined) { */
 ipcMain.on("selectedDatabase", (event, arg) => {
-  if (database_name === undefined) {
-    store.set('persistent_DB', arg)
-    database_name = store.get('persistent_DB')
-  } else if (database_name != arg) {
+  if (database_name === undefined || database_name != arg) {
     store.set('persistent_DB', arg)
     database_name = store.get('persistent_DB')
   }
 })
-console.log("pase por aqui", database_name)
+
+console.log("Base de Datos por defecto: ", database_name)
 getSale(database_name)
 
 

@@ -4,9 +4,9 @@
     <div class="config_form" >
       <!-- <label>Elija una Bases de Datos: </label> -->
       {{selectOfDBs}}
-      <select v-model="selectedDatabase" class="input_family">
+      <select v-model="selectedDatabase" class="input_family" required>
         <option selected value="selecciona">Elija una Bases de Datos</option>
-        <option v-for="database in databases">
+        <option v-for="(database, db) in databases" :key="db">
           {{database.name}}
         </option>
       </select>
@@ -66,7 +66,7 @@ export default {
         });
     },
     sendDB() {
-      if (this.selectedDatabase == "selecciona") {
+      if (this.selectedDatabase == "selecciona" || this.selectedDatabase == "" ) {
         this.$swal({
           type: "error",
           title: "Debe seleccionar una base de datos válida",
